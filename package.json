@@ -12,6 +12,7 @@
 		"env:stop": "wp-env stop",
 		"env:destroy": "wp-env destroy",
 		"test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/product-markdown-mirror vendor/bin/phpunit",
-		"test:e2e": "playwright test --config tests/e2e/playwright.config.js"
+		"test:e2e": "playwright test --config tests/e2e/playwright.config.js",
+		"build": "bash scripts/build-zip.sh"
 	}
 }

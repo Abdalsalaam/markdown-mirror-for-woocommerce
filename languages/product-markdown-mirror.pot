@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Product Markdown Mirror by AgentMint 1.0.0\n"
+"Project-Id-Version: Product Markdown Mirror by AgentMint 1.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/product-markdown-mirror\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-11T10:39:53+00:00\n"
+"POT-Creation-Date: 2026-07-11T12:23:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: product-markdown-mirror\n"
@@ -43,43 +43,98 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: includes/class-main.php:151
+#: includes/class-main.php:156
 msgid "Product Markdown Mirror requires WooCommerce to be installed and active."
 msgstr ""
 
-#: includes/class-settings.php:175
+#: includes/class-settings.php:218
 msgid "Mirror output"
 msgstr ""
 
-#: includes/class-settings.php:182
+#: includes/class-settings.php:225
 msgid "Serve product mirrors"
 msgstr ""
 
-#: includes/class-settings.php:190
+#: includes/class-settings.php:233
 msgid "Include short description"
 msgstr ""
 
-#: includes/class-settings.php:205
-#: includes/class-settings.php:267
+#: includes/class-settings.php:241
+msgid "Taxonomy mirrors"
+msgstr ""
+
+#: includes/class-settings.php:274
+msgid "Category mirrors"
+msgstr ""
+
+#: includes/class-settings.php:275
+msgid "Serve .md mirrors for product category archives"
+msgstr ""
+
+#: includes/class-settings.php:279
+msgid "Brand mirrors"
+msgstr ""
+
+#: includes/class-settings.php:280
+msgid "Serve .md mirrors for brand archives"
+msgstr ""
+
+#: includes/class-settings.php:284
+msgid "Tag mirrors"
+msgstr ""
+
+#: includes/class-settings.php:285
+msgid "Serve .md mirrors for product tag archives"
+msgstr ""
+
+#: includes/class-settings.php:297
+msgid "Each group adds public .md mirrors for its archive pages: term name, description, subcategories, and a paginated product list (100 per page). All groups are off until you enable them."
+msgstr ""
+
+#: includes/class-settings.php:332
+#: includes/class-settings.php:394
 msgid "Product Markdown Mirror"
 msgstr ""
 
-#: includes/class-settings.php:206
+#: includes/class-settings.php:333
 msgid "Markdown Mirror"
 msgstr ""
 
-#: includes/class-settings.php:220
+#: includes/class-settings.php:347
 msgid "Serves a read-only Markdown copy of each product page at {product-url}.md. The mirror always carries exactly the facts the product page shows; nothing here can make them differ."
 msgstr ""
 
-#: includes/class-settings.php:222
+#: includes/class-settings.php:349
 msgid "Honest boundary: no verified public source shows a shopping agent fetches product Markdown today. Treat mirrors as inexpensive, standards-shaped groundwork, not a proven ranking lever."
 msgstr ""
 
-#: includes/class-settings.php:237
+#: includes/class-settings.php:364
 msgid "Serve .md mirrors for published products"
 msgstr ""
 
-#: includes/class-settings.php:252
+#: includes/class-settings.php:379
 msgid "Append the product short description to each mirror"
+msgstr ""
+
+#. translators: %d: number of products in the term.
+#: includes/class-term-renderer.php:127
+msgid "%d product"
+msgid_plural "%d products"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-term-renderer.php:271
+msgid "Product category"
+msgstr ""
+
+#: includes/class-term-renderer.php:275
+msgid "Product tag"
+msgstr ""
+
+#: includes/class-term-renderer.php:279
+msgid "Brand"
+msgstr ""
+
+#: includes/class-term-renderer.php:282
+msgid "Product taxonomy"
 msgstr ""
