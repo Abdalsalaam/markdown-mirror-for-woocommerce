@@ -189,6 +189,17 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The deferred activation flush flag is consumed exactly once.
+	 */
+	public function test_activation_flush_flag_consumed() {
+		update_option( 'product_markdown_mirror_flush_needed', 'yes', false );
+
+		$this->router->maybe_flush_rules();
+
+		$this->assertFalse( get_option( 'product_markdown_mirror_flush_needed' ) );
+	}
+
+	/**
 	 * A .md request URL resolves to our query var through the rewrite system.
 	 */
 	public function test_pretty_url_maps_to_query_var() {
