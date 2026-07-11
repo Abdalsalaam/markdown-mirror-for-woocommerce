@@ -2,10 +2,10 @@
 /**
  * Settings component tests (T-03).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Settings;
+use AgentMint\MarkdownMirrorWC\Settings;
 
 /**
  * Tests for the Settings class: defaults, sanitization, registration, menu, capability.
@@ -163,20 +163,20 @@ class SettingsTest extends WP_UnitTestCase {
 	 * Saving settings queues the deferred rewrite flush (routes may change).
 	 */
 	public function test_settings_change_queues_rewrite_flush() {
-		delete_option( 'product_markdown_mirror_flush_needed' );
+		delete_option( 'mdmirwc_flush_needed' );
 
 		$settings = new Settings();
 		$settings->register_hooks();
 
 		// First save fires add_option_*.
 		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
-		$this->assertSame( 'yes', get_option( 'product_markdown_mirror_flush_needed' ) );
+		$this->assertSame( 'yes', get_option( 'mdmirwc_flush_needed' ) );
 
-		delete_option( 'product_markdown_mirror_flush_needed' );
+		delete_option( 'mdmirwc_flush_needed' );
 
 		// Subsequent change fires update_option_*.
 		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'no' ) );
-		$this->assertSame( 'yes', get_option( 'product_markdown_mirror_flush_needed' ) );
+		$this->assertSame( 'yes', get_option( 'mdmirwc_flush_needed' ) );
 	}
 
 	/**
@@ -220,7 +220,7 @@ class SettingsTest extends WP_UnitTestCase {
 		$this->assertNotFalse( has_action( 'admin_init', array( $settings, 'register_settings' ) ) );
 		$this->assertNotFalse( has_filter( 'woocommerce_get_sections_products', array( $settings, 'add_wc_section' ) ) );
 		$this->assertNotFalse( has_filter( 'woocommerce_get_settings_products', array( $settings, 'add_wc_settings' ) ) );
-		$this->assertNotFalse( has_action( 'woocommerce_admin_field_product_markdown_mirror_conflict_status', array( $settings, 'render_conflict_status' ) ) );
+		$this->assertNotFalse( has_action( 'woocommerce_admin_field_mdmirwc_conflict_status', array( $settings, 'render_conflict_status' ) ) );
 	}
 
 	/**
@@ -232,7 +232,7 @@ class SettingsTest extends WP_UnitTestCase {
 		$fields = $settings->add_wc_settings( array(), Settings::SECTION_ID );
 		$types  = wp_list_pluck( $fields, 'type' );
 
-		$this->assertContains( 'product_markdown_mirror_conflict_status', $types, 'The settings screen must carry the conflict status row.' );
+		$this->assertContains( 'mdmirwc_conflict_status', $types, 'The settings screen must carry the conflict status row.' );
 	}
 
 	/**
@@ -254,7 +254,7 @@ class SettingsTest extends WP_UnitTestCase {
 	 */
 	public function test_conflict_status_renders_conflict_with_reason() {
 		add_filter(
-			'product_markdown_mirror_conflicting_plugins',
+			'mdmirwc_conflicting_plugins',
 			static function ( $slugs ) {
 				$slugs[] = 'fake-md-server';
 				return $slugs;

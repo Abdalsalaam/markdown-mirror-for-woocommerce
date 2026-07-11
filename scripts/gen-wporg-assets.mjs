@@ -198,7 +198,7 @@ function banner(markSmall, markBig) {
           letterSpacing: '-0.02em',
           maxWidth: '1080px',
         },
-        'Product Markdown Mirror',
+        'Markdown Mirror for WooCommerce',
       ),
       // Subtitle.
       div(

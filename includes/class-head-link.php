@@ -2,10 +2,10 @@
 /**
  * Head link: advertises the mirror via rel="alternate" on product pages.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 use WC_Product;
 
@@ -80,7 +80,7 @@ class Head_Link {
 		 * @param bool     $mirrored Whether the term is mirrored.
 		 * @param \WP_Term $term     Term being rendered.
 		 */
-		if ( ! apply_filters( 'product_markdown_mirror_term_is_mirrored', true, $term ) ) {
+		if ( ! apply_filters( 'mdmirwc_term_is_mirrored', true, $term ) ) {
 			return;
 		}
 
@@ -114,7 +114,7 @@ class Head_Link {
 		 * @param bool       $mirrored Whether the product is mirrored.
 		 * @param WC_Product $product  Product being rendered.
 		 */
-		if ( ! apply_filters( 'product_markdown_mirror_is_mirrored', true, $product ) ) {
+		if ( ! apply_filters( 'mdmirwc_is_mirrored', true, $product ) ) {
 			return;
 		}
 

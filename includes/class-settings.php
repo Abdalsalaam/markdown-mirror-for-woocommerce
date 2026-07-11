@@ -2,10 +2,10 @@
 /**
  * Settings: option schema, sanitization, and the WooCommerce settings section.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,21 +25,21 @@ class Settings {
 	 *
 	 * @var string
 	 */
-	const OPTION_NAME = 'product_markdown_mirror_settings';
+	const OPTION_NAME = 'mdmirwc_settings';
 
 	/**
 	 * Settings group used with register_setting (sanitize wiring).
 	 *
 	 * @var string
 	 */
-	const OPTION_GROUP = 'product_markdown_mirror';
+	const OPTION_GROUP = 'mdmirwc';
 
 	/**
 	 * WooCommerce products-tab section id.
 	 *
 	 * @var string
 	 */
-	const SECTION_ID = 'markdown-mirror';
+	const SECTION_ID = 'mdmirwc';
 
 	/**
 	 * Default values for every known setting: everything on.
@@ -72,44 +72,44 @@ class Settings {
 	public static function product_section_fields() {
 		return array(
 			'include_identifiers'       => array(
-				'label'       => __( 'Identifiers', 'product-markdown-mirror' ),
-				'description' => __( 'GTIN, SKU, and brand', 'product-markdown-mirror' ),
+				'label'       => __( 'Identifiers', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'GTIN, SKU, and brand', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_classification'    => array(
-				'label'       => __( 'Classification', 'product-markdown-mirror' ),
-				'description' => __( 'Categories and tags with links', 'product-markdown-mirror' ),
+				'label'       => __( 'Classification', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Categories and tags with links', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_specifications'    => array(
-				'label'       => __( 'Specifications', 'product-markdown-mirror' ),
-				'description' => __( 'Visible attributes, weight, dimensions', 'product-markdown-mirror' ),
+				'label'       => __( 'Specifications', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Visible attributes, weight, dimensions', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_price'             => array(
-				'label'       => __( 'Price', 'product-markdown-mirror' ),
-				'description' => __( 'Price, currency, sale windows, tax display', 'product-markdown-mirror' ),
+				'label'       => __( 'Price', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Price, currency, sale windows, tax display', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_availability'      => array(
-				'label'       => __( 'Availability', 'product-markdown-mirror' ),
-				'description' => __( 'Stock status as your store displays it', 'product-markdown-mirror' ),
+				'label'       => __( 'Availability', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Stock status as your store displays it', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_variants'          => array(
-				'label'       => __( 'Variants', 'product-markdown-mirror' ),
-				'description' => __( 'Per-variation lines for variable products', 'product-markdown-mirror' ),
+				'label'       => __( 'Variants', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Per-variation lines for variable products', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_reviews'           => array(
-				'label'       => __( 'Reviews', 'product-markdown-mirror' ),
-				'description' => __( 'Average rating and review count', 'product-markdown-mirror' ),
+				'label'       => __( 'Reviews', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Average rating and review count', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_images'            => array(
-				'label'       => __( 'Images', 'product-markdown-mirror' ),
-				'description' => __( 'Main and gallery image URLs with alt text', 'product-markdown-mirror' ),
+				'label'       => __( 'Images', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'Main and gallery image URLs with alt text', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_short_description' => array(
-				'label'       => __( 'Short description', 'product-markdown-mirror' ),
-				'description' => __( 'The product short description as plain text', 'product-markdown-mirror' ),
+				'label'       => __( 'Short description', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'The product short description as plain text', 'markdown-mirror-for-woocommerce' ),
 			),
 			'include_full_description'  => array(
-				'label'       => __( 'Full description', 'product-markdown-mirror' ),
-				'description' => __( 'The full product description as plain text', 'product-markdown-mirror' ),
+				'label'       => __( 'Full description', 'markdown-mirror-for-woocommerce' ),
+				'description' => __( 'The full product description as plain text', 'markdown-mirror-for-woocommerce' ),
 			),
 		);
 	}
@@ -196,8 +196,8 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_filter( 'woocommerce_get_sections_products', array( $this, 'add_wc_section' ) );
 		add_filter( 'woocommerce_get_settings_products', array( $this, 'add_wc_settings' ), 10, 2 );
-		add_action( 'woocommerce_admin_field_product_markdown_mirror_conflict_status', array( $this, 'render_conflict_status' ) );
-		add_filter( 'plugin_action_links_' . plugin_basename( PRODUCT_MARKDOWN_MIRROR_FILE ), array( $this, 'add_action_links' ) );
+		add_action( 'woocommerce_admin_field_mdmirwc_conflict_status', array( $this, 'render_conflict_status' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( MDMIRWC_FILE ), array( $this, 'add_action_links' ) );
 
 		// Toggling groups adds or removes public routes, so a deferred rewrite
 		// flush is queued whenever the option changes (update_option_* skips
@@ -212,7 +212,7 @@ class Settings {
 	 * @return void
 	 */
 	public function queue_rewrite_flush() {
-		update_option( 'product_markdown_mirror_flush_needed', 'yes', false );
+		update_option( 'mdmirwc_flush_needed', 'yes', false );
 	}
 
 	/**
@@ -239,7 +239,7 @@ class Settings {
 	 * @return array
 	 */
 	public function add_wc_section( $sections ) {
-		$sections[ self::SECTION_ID ] = __( 'Markdown mirrors', 'product-markdown-mirror' );
+		$sections[ self::SECTION_ID ] = __( 'Markdown mirrors', 'markdown-mirror-for-woocommerce' );
 
 		return $sections;
 	}
@@ -258,18 +258,18 @@ class Settings {
 
 		$fields = array(
 			array(
-				'title' => __( 'Markdown mirrors', 'product-markdown-mirror' ),
+				'title' => __( 'Markdown mirrors', 'markdown-mirror-for-woocommerce' ),
 				'type'  => 'title',
-				'id'    => 'product_markdown_mirror_title',
-				'desc'  => __( 'Serves a read-only Markdown copy of product and archive pages at the page URL plus .md. Mirrors always carry exactly the facts the page shows; nothing here can make them differ. Sections with no data are omitted automatically.', 'product-markdown-mirror' ),
+				'id'    => 'mdmirwc_title',
+				'desc'  => __( 'Serves a read-only Markdown copy of product and archive pages at the page URL plus .md. Mirrors always carry exactly the facts the page shows; nothing here can make them differ. Sections with no data are omitted automatically.', 'markdown-mirror-for-woocommerce' ),
 			),
 			array(
-				'type' => 'product_markdown_mirror_conflict_status',
-				'id'   => 'product_markdown_mirror_conflict_status',
+				'type' => 'mdmirwc_conflict_status',
+				'id'   => 'mdmirwc_conflict_status',
 			),
 			array(
-				'title'   => __( 'Enable mirrors', 'product-markdown-mirror' ),
-				'desc'    => __( 'Serve .md mirrors for published products', 'product-markdown-mirror' ),
+				'title'   => __( 'Enable mirrors', 'markdown-mirror-for-woocommerce' ),
+				'desc'    => __( 'Serve .md mirrors for published products', 'markdown-mirror-for-woocommerce' ),
 				'id'      => self::OPTION_NAME . '[enabled]',
 				'type'    => 'checkbox',
 				'default' => 'yes',
@@ -279,7 +279,7 @@ class Settings {
 		$first = true;
 		foreach ( self::product_section_fields() as $key => $field ) {
 			$fields[] = array(
-				'title'         => $first ? __( 'Mirror content', 'product-markdown-mirror' ) : '',
+				'title'         => $first ? __( 'Mirror content', 'markdown-mirror-for-woocommerce' ) : '',
 				'desc'          => $field['label'] . ' - ' . $field['description'],
 				'id'            => self::OPTION_NAME . '[' . $key . ']',
 				'type'          => 'checkbox',
@@ -292,9 +292,9 @@ class Settings {
 		$fields[ count( $fields ) - 1 ]['checkboxgroup'] = 'end';
 
 		$taxonomy_toggles = array(
-			'mirror_categories' => array( 'product_cat', __( 'Category archive mirrors (hierarchical paths included)', 'product-markdown-mirror' ) ),
-			'mirror_brands'     => array( 'product_brand', __( 'Brand archive mirrors', 'product-markdown-mirror' ) ),
-			'mirror_tags'       => array( 'product_tag', __( 'Tag archive mirrors', 'product-markdown-mirror' ) ),
+			'mirror_categories' => array( 'product_cat', __( 'Category archive mirrors (hierarchical paths included)', 'markdown-mirror-for-woocommerce' ) ),
+			'mirror_brands'     => array( 'product_brand', __( 'Brand archive mirrors', 'markdown-mirror-for-woocommerce' ) ),
+			'mirror_tags'       => array( 'product_tag', __( 'Tag archive mirrors', 'markdown-mirror-for-woocommerce' ) ),
 		);
 
 		$first = true;
@@ -304,7 +304,7 @@ class Settings {
 			}
 
 			$fields[] = array(
-				'title'         => $first ? __( 'Taxonomy mirrors', 'product-markdown-mirror' ) : '',
+				'title'         => $first ? __( 'Taxonomy mirrors', 'markdown-mirror-for-woocommerce' ) : '',
 				'desc'          => $toggle[1],
 				'id'            => self::OPTION_NAME . '[' . $key . ']',
 				'type'          => 'checkbox',
@@ -318,7 +318,7 @@ class Settings {
 
 		$fields[] = array(
 			'type' => 'sectionend',
-			'id'   => 'product_markdown_mirror_sectionend',
+			'id'   => 'mdmirwc_sectionend',
 		);
 
 		return $fields;
@@ -337,19 +337,19 @@ class Settings {
 		$conflicts = new Conflicts();
 		$detected  = $conflicts->detect();
 		?>
-		<tr class="product-markdown-mirror-status">
-			<th scope="row" class="titledesc"><?php esc_html_e( 'Status', 'product-markdown-mirror' ); ?></th>
+		<tr class="markdown-mirror-for-woocommerce-status">
+			<th scope="row" class="titledesc"><?php esc_html_e( 'Status', 'markdown-mirror-for-woocommerce' ); ?></th>
 			<td class="forminp">
 				<?php if ( empty( $detected ) ) : ?>
-					<strong style="color: #00a32a;"><?php esc_html_e( 'Good', 'product-markdown-mirror' ); ?></strong>
-					<p class="description"><?php esc_html_e( 'No conflicts detected. This plugin is the only active plugin serving .md URLs.', 'product-markdown-mirror' ); ?></p>
+					<strong style="color: #00a32a;"><?php esc_html_e( 'Good', 'markdown-mirror-for-woocommerce' ); ?></strong>
+					<p class="description"><?php esc_html_e( 'No conflicts detected. This plugin is the only active plugin serving .md URLs.', 'markdown-mirror-for-woocommerce' ); ?></p>
 				<?php else : ?>
-					<strong style="color: #d63638;"><?php esc_html_e( 'Conflict', 'product-markdown-mirror' ); ?></strong>
+					<strong style="color: #d63638;"><?php esc_html_e( 'Conflict', 'markdown-mirror-for-woocommerce' ); ?></strong>
 					<p class="description">
 						<?php
 						printf(
 							/* translators: %s: comma-separated plugin slugs. */
-							esc_html__( 'Another active plugin also serves .md URLs (%s). Only one plugin should own that suffix: which one answers depends on rewrite rule order, so mirrors may be served by the other plugin. Keep one and deactivate the other.', 'product-markdown-mirror' ),
+							esc_html__( 'Another active plugin also serves .md URLs (%s). Only one plugin should own that suffix: which one answers depends on rewrite rule order, so mirrors may be served by the other plugin. Keep one and deactivate the other.', 'markdown-mirror-for-woocommerce' ),
 							esc_html( implode( ', ', $detected ) )
 						);
 						?>
@@ -369,7 +369,7 @@ class Settings {
 	public function add_action_links( $links ) {
 		array_unshift(
 			$links,
-			'<a href="' . esc_url( self::settings_url() ) . '">' . esc_html__( 'Settings', 'product-markdown-mirror' ) . '</a>'
+			'<a href="' . esc_url( self::settings_url() ) . '">' . esc_html__( 'Settings', 'markdown-mirror-for-woocommerce' ) . '</a>'
 		);
 
 		return $links;

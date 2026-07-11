@@ -2,12 +2,12 @@
 /**
  * Cache layer tests (T-08).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Cache;
-use AgentMint\ProductMarkdownMirror\Router;
-use AgentMint\ProductMarkdownMirror\Settings;
+use AgentMint\MarkdownMirrorWC\Cache;
+use AgentMint\MarkdownMirrorWC\Router;
+use AgentMint\MarkdownMirrorWC\Settings;
 
 require_once __DIR__ . '/class-pmm-counting-renderer.php';
 

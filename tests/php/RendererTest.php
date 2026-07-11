@@ -2,10 +2,10 @@
 /**
  * Renderer core tests (T-04): simple products to Markdown, equivalence-guarded.
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Renderer;
+use AgentMint\MarkdownMirrorWC\Renderer;
 
 /**
  * Tests for Renderer::render() with simple products.
@@ -252,7 +252,7 @@ class RendererTest extends WP_UnitTestCase {
 	 */
 	public function test_categories_rendered_with_hierarchy() {
 		update_option(
-			AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME,
+			AgentMint\MarkdownMirrorWC\Settings::OPTION_NAME,
 			array( 'mirror_categories' => 'no' )
 		);
 
@@ -271,7 +271,7 @@ class RendererTest extends WP_UnitTestCase {
 		$term = get_term( $child['term_id'], 'product_cat' );
 		$this->assertStringContainsString( (string) get_term_link( $term ), $markdown, 'Category links the HTML archive while term mirrors are off.' );
 
-		delete_option( AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME );
+		delete_option( AgentMint\MarkdownMirrorWC\Settings::OPTION_NAME );
 	}
 
 	/**
@@ -279,7 +279,7 @@ class RendererTest extends WP_UnitTestCase {
 	 */
 	public function test_category_links_follow_term_mirror_toggle() {
 		update_option(
-			AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME,
+			AgentMint\MarkdownMirrorWC\Settings::OPTION_NAME,
 			array( 'mirror_categories' => 'yes' )
 		);
 
@@ -291,9 +291,9 @@ class RendererTest extends WP_UnitTestCase {
 		$markdown = $this->render( $product );
 		$term     = get_term( $cat['term_id'], 'product_cat' );
 
-		$this->assertStringContainsString( AgentMint\ProductMarkdownMirror\Router::term_mirror_url( $term ), $markdown );
+		$this->assertStringContainsString( AgentMint\MarkdownMirrorWC\Router::term_mirror_url( $term ), $markdown );
 
-		delete_option( AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME );
+		delete_option( AgentMint\MarkdownMirrorWC\Settings::OPTION_NAME );
 	}
 
 	/**
@@ -427,7 +427,7 @@ class RendererTest extends WP_UnitTestCase {
 	 */
 	public function test_document_filter_applies() {
 		add_filter(
-			'product_markdown_mirror_document',
+			'mdmirwc_document',
 			static function ( $doc ) {
 				return $doc . "\nFILTERED";
 			}

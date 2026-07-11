@@ -2,10 +2,10 @@
 /**
  * Main plugin bootstrap class.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -64,7 +64,7 @@ final class Main {
 		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
 				'custom_order_tables',
-				PRODUCT_MARKDOWN_MIRROR_FILE,
+				MDMIRWC_FILE,
 				true
 			);
 		}
@@ -99,15 +99,15 @@ final class Main {
 	 * @return void
 	 */
 	private function includes() {
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-settings.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-renderer.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-term-renderer.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-response.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-router.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-term-router.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-cache.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-head-link.php';
-		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-conflicts.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-settings.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-renderer.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-term-renderer.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-response.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-router.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-term-router.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-cache.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-head-link.php';
+		require_once MDMIRWC_ABSPATH . 'includes/class-conflicts.php';
 	}
 
 	/**
@@ -161,7 +161,7 @@ final class Main {
 		}
 
 		echo '<div class="notice notice-error"><p>';
-		esc_html_e( 'Product Markdown Mirror requires WooCommerce to be installed and active.', 'product-markdown-mirror' );
+		esc_html_e( 'Markdown Mirror for WooCommerce requires WooCommerce to be installed and active.', 'markdown-mirror-for-woocommerce' );
 		echo '</p></div>';
 	}
 }

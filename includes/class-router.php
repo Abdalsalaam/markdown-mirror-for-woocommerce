@@ -2,10 +2,10 @@
 /**
  * Router: rewrite rules, query var, and the request handler for .md mirrors.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 use WC_Product;
 
@@ -25,7 +25,7 @@ class Router {
 	 *
 	 * @var string
 	 */
-	const QUERY_VAR = 'product_markdown_mirror';
+	const QUERY_VAR = 'mdmirwc';
 
 	/**
 	 * Renderer used for mirror bodies.
@@ -115,11 +115,11 @@ class Router {
 	 * @return void
 	 */
 	public function maybe_flush_rules() {
-		if ( 'yes' !== get_option( 'product_markdown_mirror_flush_needed' ) ) {
+		if ( 'yes' !== get_option( 'mdmirwc_flush_needed' ) ) {
 			return;
 		}
 
-		delete_option( 'product_markdown_mirror_flush_needed' );
+		delete_option( 'mdmirwc_flush_needed' );
 		flush_rewrite_rules();
 	}
 
@@ -208,7 +208,7 @@ class Router {
 		 * @param bool       $mirrored Whether the product is mirrored.
 		 * @param WC_Product $product  Product being requested.
 		 */
-		if ( ! apply_filters( 'product_markdown_mirror_is_mirrored', true, $product ) ) {
+		if ( ! apply_filters( 'mdmirwc_is_mirrored', true, $product ) ) {
 			return null;
 		}
 
@@ -233,7 +233,7 @@ class Router {
 		 * @param int        $max_age Seconds (default 300).
 		 * @param WC_Product $product Product being served.
 		 */
-		$max_age = (int) apply_filters( 'product_markdown_mirror_cache_max_age', 300, $product );
+		$max_age = (int) apply_filters( 'mdmirwc_cache_max_age', 300, $product );
 
 		$modified = $product->get_date_modified();
 		if ( ! $modified ) {

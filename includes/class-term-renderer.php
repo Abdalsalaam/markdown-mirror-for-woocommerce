@@ -2,10 +2,10 @@
 /**
  * Term renderer: taxonomy archive mirrors (categories, brands, tags).
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 use WP_Query;
 use WP_Term;
@@ -41,7 +41,7 @@ class Term_Renderer extends Renderer {
 		 * @param int     $page_size Products per page (default 100).
 		 * @param WP_Term $term      Term being rendered.
 		 */
-		$page_size = max( 1, (int) apply_filters( 'product_markdown_mirror_term_page_size', 100, $term ) );
+		$page_size = max( 1, (int) apply_filters( 'mdmirwc_term_page_size', 100, $term ) );
 
 		$query = new WP_Query(
 			array(
@@ -97,7 +97,7 @@ class Term_Renderer extends Renderer {
 		 * @param WP_Term               $term     Term being rendered.
 		 * @param int                   $page     Mirror page number.
 		 */
-		$sections = apply_filters( 'product_markdown_mirror_term_sections', $sections, $term, $page );
+		$sections = apply_filters( 'mdmirwc_term_sections', $sections, $term, $page );
 
 		$document = implode( "\n\n", array_filter( array_map( 'trim', $sections ) ) );
 
@@ -110,7 +110,7 @@ class Term_Renderer extends Renderer {
 		 * @param WP_Term $term     Term being rendered.
 		 * @param int     $page     Mirror page number.
 		 */
-		return apply_filters( 'product_markdown_mirror_term_document', $document, $term, $page );
+		return apply_filters( 'mdmirwc_term_document', $document, $term, $page );
 	}
 
 	/**
@@ -124,7 +124,7 @@ class Term_Renderer extends Renderer {
 		$name = $this->single_line( $term->name );
 
 		/* translators: %d: number of products in the term. */
-		$count_text = sprintf( _n( '%d product', '%d products', $total, 'product-markdown-mirror' ), $total );
+		$count_text = sprintf( _n( '%d product', '%d products', $total, 'markdown-mirror-for-woocommerce' ), $total );
 
 		$block = '# ' . $name . "\n\n" . '> ' . $name . '. ' . $this->kind_label( $term->taxonomy ) . '. ' . $count_text . '.';
 
@@ -268,17 +268,17 @@ class Term_Renderer extends Renderer {
 	 */
 	private function kind_label( $taxonomy ) {
 		if ( 'product_cat' === $taxonomy ) {
-			return __( 'Product category', 'product-markdown-mirror' );
+			return __( 'Product category', 'markdown-mirror-for-woocommerce' );
 		}
 
 		if ( 'product_tag' === $taxonomy ) {
-			return __( 'Product tag', 'product-markdown-mirror' );
+			return __( 'Product tag', 'markdown-mirror-for-woocommerce' );
 		}
 
 		if ( 'product_brand' === $taxonomy ) {
-			return __( 'Brand', 'product-markdown-mirror' );
+			return __( 'Brand', 'markdown-mirror-for-woocommerce' );
 		}
 
-		return __( 'Product taxonomy', 'product-markdown-mirror' );
+		return __( 'Product taxonomy', 'markdown-mirror-for-woocommerce' );
 	}
 }

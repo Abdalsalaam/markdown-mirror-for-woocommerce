@@ -1,4 +1,4 @@
-=== Product Markdown Mirror ===
+=== Markdown Mirror for WooCommerce ===
 Contributors: abdalsalaam
 Tags: markdown, ai agents, products, machine readable, woocommerce
 Requires at least: 6.5
@@ -12,7 +12,7 @@ Serve read-only Markdown mirrors of your WooCommerce product pages at {product-u
 
 == Description ==
 
-Product Markdown Mirror serves a plain Markdown copy of each WooCommerce product page at the product URL plus a `.md` suffix. AI agents and crawlers that prefer token-light text get the same facts your product page shows, ordered so the decision-relevant data comes first: identifiers, specifications, price, availability, variants.
+Markdown Mirror for WooCommerce serves a plain Markdown copy of each WooCommerce product page at the product URL plus a `.md` suffix. AI agents and crawlers that prefer token-light text get the same facts your product page shows, ordered so the decision-relevant data comes first: identifiers, specifications, price, availability, variants.
 
 Example: `https://example.com/product/ceramic-dripper/` also serves `https://example.com/product/ceramic-dripper.md`.
 
@@ -52,17 +52,17 @@ Everything is on by default. In WooCommerce, Settings, Products, Markdown mirror
 
 **For developers**
 
-* `product_markdown_mirror_is_mirrored` - exclude products from mirroring
-* `product_markdown_mirror_sections` - add or reorder document sections (for example shipping data your site actually holds)
-* `product_markdown_mirror_document` - filter the final document
-* `product_markdown_mirror_cache_max_age` - HTTP Cache-Control max-age (default 300 seconds)
-* `product_markdown_mirror_cache_ttl` - server-side cache TTL (default one hour; invalidation hooks keep mirrors correct regardless)
-* `product_markdown_mirror_max_variants` - variant lines cap (default 50, disclosed in output when applied)
-* `product_markdown_mirror_conflicting_plugins` - the known list of other .md-serving plugins
-* `product_markdown_mirror_term_is_mirrored` - exclude term archives from mirroring
-* `product_markdown_mirror_term_sections` / `product_markdown_mirror_term_document` - extend or filter term mirror documents
-* `product_markdown_mirror_term_page_size` - products per term mirror page (default 100)
-* `product_markdown_mirror_term_cache_max_age` / `product_markdown_mirror_term_cache_ttl` - term mirror cache controls
+* `mdmirwc_is_mirrored` - exclude products from mirroring
+* `mdmirwc_sections` - add or reorder document sections (for example shipping data your site actually holds)
+* `mdmirwc_document` - filter the final document
+* `mdmirwc_cache_max_age` - HTTP Cache-Control max-age (default 300 seconds)
+* `mdmirwc_cache_ttl` - server-side cache TTL (default one hour; invalidation hooks keep mirrors correct regardless)
+* `mdmirwc_max_variants` - variant lines cap (default 50, disclosed in output when applied)
+* `mdmirwc_conflicting_plugins` - the known list of other .md-serving plugins
+* `mdmirwc_term_is_mirrored` - exclude term archives from mirroring
+* `mdmirwc_term_sections` / `mdmirwc_term_document` - extend or filter term mirror documents
+* `mdmirwc_term_page_size` - products per term mirror page (default 100)
+* `mdmirwc_term_cache_max_age` / `mdmirwc_term_cache_ttl` - term mirror cache controls
 
 == Frequently Asked Questions ==
 
@@ -80,7 +80,7 @@ Honestly: nobody can promise that, and this plugin does not. No shopping agent d
 
 = Why does the mirror not show shipping or return details? =
 
-WooCommerce holds no single honest answer for shipping cost or return terms at product level, and this plugin never invents data. Developers can add sections from data their site actually holds via the `product_markdown_mirror_sections` filter.
+WooCommerce holds no single honest answer for shipping cost or return terms at product level, and this plugin never invents data. Developers can add sections from data their site actually holds via the `mdmirwc_sections` filter.
 
 = Does it work with Plain permalinks? =
 
@@ -92,7 +92,7 @@ No. The plugin emits no schema, changes no canonicals or titles, and adds exactl
 
 = Are password-protected, draft, or hidden products mirrored? =
 
-Password-protected and unpublished products are never mirrored (their mirror URLs return 404). Catalog-hidden products still have public pages in WooCommerce, so they mirror; use the `product_markdown_mirror_is_mirrored` filter to exclude specific products.
+Password-protected and unpublished products are never mirrored (their mirror URLs return 404). Catalog-hidden products still have public pages in WooCommerce, so they mirror; use the `mdmirwc_is_mirrored` filter to exclude specific products.
 
 = Where are the settings? =
 

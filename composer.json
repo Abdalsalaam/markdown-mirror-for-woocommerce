@@ -1,6 +1,6 @@
 {
-	"name": "abdalsalaam/product-markdown-mirror",
-	"description": "Product Markdown Mirror - read-only Markdown mirrors of WooCommerce product pages.",
+	"name": "abdalsalaam/markdown-mirror-for-woocommerce",
+	"description": "Markdown Mirror for WooCommerce - read-only Markdown mirrors of WooCommerce product pages.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [
@@ -38,7 +38,7 @@
 			"phpcbf -p"
 		],
 		"lint": [
-			"@php -l product-markdown-mirror.php",
+			"@php -l markdown-mirror-for-woocommerce.php",
 			"@php -l uninstall.php"
 		]
 	}

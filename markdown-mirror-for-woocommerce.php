@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: Product Markdown Mirror
+ * Plugin Name: Markdown Mirror for WooCommerce
  * Plugin URI: https://agentmint.net/blueprints/product-markdown-mirror/
  * Description: Serves read-only Markdown mirrors of WooCommerce product pages at {product-url}.md with rel="alternate" discovery. No tracking, no store writes.
  * Version: 1.0.0
  * Author: AgentMint
  * Author URI: https://agentmint.net
- * Text Domain: product-markdown-mirror
+ * Text Domain: markdown-mirror-for-woocommerce
  * Domain Path: /languages
  * Requires Plugins: woocommerce
  * Requires PHP: 7.4
@@ -17,27 +17,27 @@
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PRODUCT_MARKDOWN_MIRROR_VERSION', '1.0.0' );
-define( 'PRODUCT_MARKDOWN_MIRROR_FILE', __FILE__ );
-define( 'PRODUCT_MARKDOWN_MIRROR_ABSPATH', trailingslashit( __DIR__ ) );
+define( 'MDMIRWC_VERSION', '1.0.0' );
+define( 'MDMIRWC_FILE', __FILE__ );
+define( 'MDMIRWC_ABSPATH', trailingslashit( __DIR__ ) );
 
-require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-main.php';
+require_once MDMIRWC_ABSPATH . 'includes/class-main.php';
 
 /**
  * Return the shared plugin instance.
  *
- * @return \AgentMint\ProductMarkdownMirror\Main
+ * @return \AgentMint\MarkdownMirrorWC\Main
  */
-function product_markdown_mirror() {
-	return \AgentMint\ProductMarkdownMirror\Main::instance();
+function mdmirwc() {
+	return \AgentMint\MarkdownMirrorWC\Main::instance();
 }
 
-product_markdown_mirror();
+mdmirwc();
 
 /**
  * On activation, queue a rewrite-rules flush for the next request.
@@ -48,18 +48,18 @@ product_markdown_mirror();
  *
  * @return void
  */
-function product_markdown_mirror_activate() {
-	update_option( 'product_markdown_mirror_flush_needed', 'yes', false );
+function mdmirwc_activate() {
+	update_option( 'mdmirwc_flush_needed', 'yes', false );
 }
-register_activation_hook( __FILE__, 'product_markdown_mirror_activate' );
+register_activation_hook( __FILE__, 'mdmirwc_activate' );
 
 /**
  * On deactivation, flush rewrite rules so the mirror routes are removed.
  *
  * @return void
  */
-function product_markdown_mirror_deactivate() {
-	delete_option( 'product_markdown_mirror_flush_needed' );
+function mdmirwc_deactivate() {
+	delete_option( 'mdmirwc_flush_needed' );
 	flush_rewrite_rules();
 }
-register_deactivation_hook( __FILE__, 'product_markdown_mirror_deactivate' );
+register_deactivation_hook( __FILE__, 'mdmirwc_deactivate' );

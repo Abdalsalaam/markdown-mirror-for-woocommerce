@@ -2,10 +2,10 @@
 /**
  * Term router: .md routes for product taxonomy archives.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 use WP_Term;
 
@@ -25,21 +25,21 @@ class Term_Router {
 	 *
 	 * @var string
 	 */
-	const QUERY_VAR_TAX = 'product_markdown_mirror_tax';
+	const QUERY_VAR_TAX = 'mdmirwc_tax';
 
 	/**
 	 * Query var: requested term path (slug, or hierarchy path for categories).
 	 *
 	 * @var string
 	 */
-	const QUERY_VAR_TERM = 'product_markdown_mirror_term';
+	const QUERY_VAR_TERM = 'mdmirwc_term';
 
 	/**
 	 * Query var: mirror page number.
 	 *
 	 * @var string
 	 */
-	const QUERY_VAR_PAGE = 'product_markdown_mirror_pg';
+	const QUERY_VAR_PAGE = 'mdmirwc_pg';
 
 	/**
 	 * Taxonomies this router may ever serve.
@@ -184,7 +184,7 @@ class Term_Router {
 		 * @param bool    $mirrored Whether the term is mirrored.
 		 * @param WP_Term $term     Term being requested.
 		 */
-		if ( ! apply_filters( 'product_markdown_mirror_term_is_mirrored', true, $term ) ) {
+		if ( ! apply_filters( 'mdmirwc_term_is_mirrored', true, $term ) ) {
 			return Response::not_found();
 		}
 
@@ -263,7 +263,7 @@ class Term_Router {
 		 * @param int     $max_age Seconds (default 300).
 		 * @param WP_Term $term    Term being served.
 		 */
-		$max_age = (int) apply_filters( 'product_markdown_mirror_term_cache_max_age', 300, $term );
+		$max_age = (int) apply_filters( 'mdmirwc_term_cache_max_age', 300, $term );
 
 		$link = get_term_link( $term );
 

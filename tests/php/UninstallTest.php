@@ -2,11 +2,11 @@
 /**
  * Uninstall behavior tests (T-09).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Cache;
-use AgentMint\ProductMarkdownMirror\Settings;
+use AgentMint\MarkdownMirrorWC\Cache;
+use AgentMint\MarkdownMirrorWC\Settings;
 
 /**
  * Tests that uninstall removes every trace the plugin can create.
@@ -22,41 +22,36 @@ class UninstallTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Uninstall removes options, transients, and user meta; nothing else.
+	 * Uninstall removes options, transients, and term meta; nothing else.
 	 */
 	public function test_uninstall_removes_all_plugin_data() {
 		global $wpdb;
 
 		// Seed everything the plugin can persist.
 		update_option( Settings::OPTION_NAME, array( 'enabled' => 'no' ) );
-		update_option( 'product_markdown_mirror_flush_needed', 'yes', false );
+		update_option( 'mdmirwc_flush_needed', 'yes', false );
 		update_option( Cache::GENERATION_OPTION, 7, false );
-		set_transient( 'product_markdown_mirror_7_123', 'BODY', 300 );
-
-		$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
-		// Legacy dismissal meta written by pre-release builds; uninstall still sweeps it.
-		update_user_meta( $user_id, 'product_markdown_mirror_conflict_dismissed', '1' );
+		set_transient( 'mdmirwc_7_123', 'BODY', 300 );
 
 		$term_result = wp_insert_term( 'Uninstall Term', 'product_cat' );
-		update_term_meta( $term_result['term_id'], 'product_markdown_mirror_ver', 5 );
+		update_term_meta( $term_result['term_id'], 'mdmirwc_ver', 5 );
 
 		// Unrelated data that must survive.
 		update_option( 'unrelated_option', 'keep-me' );
 		set_transient( 'unrelated_transient', 'keep-me', 300 );
 
-		product_markdown_mirror_uninstall_site();
+		mdmirwc_uninstall_site();
 
 		$this->assertFalse( get_option( Settings::OPTION_NAME ) );
-		$this->assertFalse( get_option( 'product_markdown_mirror_flush_needed' ) );
+		$this->assertFalse( get_option( 'mdmirwc_flush_needed' ) );
 		$this->assertFalse( get_option( Cache::GENERATION_OPTION ) );
-		$this->assertFalse( get_transient( 'product_markdown_mirror_7_123' ) );
-		$this->assertSame( '', (string) get_user_meta( $user_id, 'product_markdown_mirror_conflict_dismissed', true ) );
-		$this->assertSame( '', (string) get_term_meta( $term_result['term_id'], 'product_markdown_mirror_ver', true ) );
+		$this->assertFalse( get_transient( 'mdmirwc_7_123' ) );
+		$this->assertSame( '', (string) get_term_meta( $term_result['term_id'], 'mdmirwc_ver', true ) );
 
 		$leftover = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_product_markdown_mirror_' ) . '%'
+				$wpdb->esc_like( '_transient_mdmirwc_' ) . '%'
 			)
 		);
 		$this->assertSame( '0', (string) $leftover );

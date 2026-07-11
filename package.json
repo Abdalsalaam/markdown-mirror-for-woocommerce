@@ -1,7 +1,7 @@
 {
-	"name": "product-markdown-mirror",
+	"name": "markdown-mirror-for-woocommerce",
 	"private": true,
-	"description": "Dev environment for Product Markdown Mirror.",
+	"description": "Dev environment for Markdown Mirror for WooCommerce.",
 	"license": "GPL-2.0-or-later",
 	"devDependencies": {
 		"@playwright/test": "^1.61.1",
@@ -11,7 +11,7 @@
 		"env:start": "wp-env start",
 		"env:stop": "wp-env stop",
 		"env:destroy": "wp-env destroy",
-		"test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/product-markdown-mirror vendor/bin/phpunit",
+		"test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/markdown-mirror-for-woocommerce vendor/bin/phpunit",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.js",
 		"build": "bash scripts/build-zip.sh"
 	}

@@ -7,7 +7,7 @@
  * Prereqs:
  *   npx wp-env start
  *   npx wp-env run cli wp rewrite structure '/%postname%/' --hard
- *   npx wp-env run cli wp eval-file wp-content/plugins/product-markdown-mirror/scripts/wporg-screenshots-seed.php
+ *   npx wp-env run cli wp eval-file wp-content/plugins/markdown-mirror-for-woocommerce/scripts/wporg-screenshots-seed.php
  *
  * Run: node scripts/wporg-screenshots.mjs
  * Writes .wordpress.org/screenshot-{1,2,3}.png (keep readme.txt's Screenshots
@@ -57,7 +57,7 @@ async function main() {
   await adminPage.click('#wp-submit');
   await adminPage.waitForURL('**/wp-admin/**');
 
-  await adminPage.goto(`${BASE}/wp-admin/admin.php?page=wc-settings&tab=products&section=markdown-mirror`);
+  await adminPage.goto(`${BASE}/wp-admin/admin.php?page=wc-settings&tab=products&section=mdmirwc`);
   await adminPage.waitForSelector('#mainform', { timeout: 15000 });
   await dismissNotices(adminPage);
   await adminPage.screenshot({ path: join(OUT, 'screenshot-1.png'), animations: 'disabled', caret: 'hide' });

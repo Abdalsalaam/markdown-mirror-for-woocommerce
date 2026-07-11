@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Product Markdown Mirror">
-	<description>PHP_CodeSniffer ruleset for Product Markdown Mirror by AgentMint.</description>
+<ruleset name="Markdown Mirror for WooCommerce">
+	<description>PHP_CodeSniffer ruleset for Markdown Mirror for WooCommerce by AgentMint.</description>
 
 	<arg value="ps" />
 	<arg name="parallel" value="20" />
@@ -28,7 +28,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="product-markdown-mirror" />
+				<element value="markdown-mirror-for-woocommerce" />
 			</property>
 		</properties>
 	</rule>
@@ -36,9 +36,9 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="product_markdown_mirror" />
-				<element value="PRODUCT_MARKDOWN_MIRROR" />
-				<element value="AgentMint\ProductMarkdownMirror" />
+				<element value="mdmirwc" />
+				<element value="MDMIRWC" />
+				<element value="AgentMint\MarkdownMirrorWC" />
 			</property>
 		</properties>
 		<!-- Test scaffolding defines WP-core-mandated constants (DB_NAME, WP_TESTS_*) and is never shipped. -->

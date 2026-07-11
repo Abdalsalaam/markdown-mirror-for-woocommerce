@@ -2,10 +2,10 @@
 /**
  * Variable-product rendering tests (T-05).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Renderer;
+use AgentMint\MarkdownMirrorWC\Renderer;
 
 /**
  * Tests for the Variants section and variable-product price ranges.
@@ -167,7 +167,7 @@ class VariantsTest extends WP_UnitTestCase {
 		);
 
 		add_filter(
-			'product_markdown_mirror_max_variants',
+			'mdmirwc_max_variants',
 			static function () {
 				return 2;
 			}

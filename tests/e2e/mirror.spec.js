@@ -23,11 +23,11 @@ function wp( command ) {
 	} ).trim();
 }
 
-test.describe( 'Product Markdown Mirror', () => {
+test.describe( 'Markdown Mirror for WooCommerce', () => {
 	test.beforeAll( () => {
-		wp( 'plugin activate product-markdown-mirror' );
+		wp( 'plugin activate markdown-mirror-for-woocommerce' );
 		wp( 'rewrite structure /%postname%/ --hard' );
-		wp( 'option delete product_markdown_mirror_settings' );
+		wp( 'option delete mdmirwc_settings' );
 
 		// Idempotent seed: delete leftovers, then create fresh.
 		const existing = wp(
@@ -90,14 +90,14 @@ test.describe( 'Product Markdown Mirror', () => {
 		request,
 	} ) => {
 		wp(
-			`option update product_markdown_mirror_settings '{"enabled":"no"}' --format=json`
+			`option update mdmirwc_settings '{"enabled":"no"}' --format=json`
 		);
 
 		const off = await request.get( `/product/${ SLUG }.md` );
 		expect( off.status() ).toBe( 404 );
 
 		wp(
-			`option update product_markdown_mirror_settings '{"enabled":"yes"}' --format=json`
+			`option update mdmirwc_settings '{"enabled":"yes"}' --format=json`
 		);
 
 		const on = await request.get( `/product/${ SLUG }.md` );

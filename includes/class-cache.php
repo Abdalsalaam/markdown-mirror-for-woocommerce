@@ -2,10 +2,10 @@
 /**
  * Cache: per-product transient storage for rendered mirrors.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 use WC_Product;
 
@@ -26,14 +26,14 @@ class Cache {
 	 *
 	 * @var string
 	 */
-	const GENERATION_OPTION = 'product_markdown_mirror_cache_gen';
+	const GENERATION_OPTION = 'mdmirwc_cache_gen';
 
 	/**
 	 * Transient key prefix.
 	 *
 	 * @var string
 	 */
-	const KEY_PREFIX = 'product_markdown_mirror_';
+	const KEY_PREFIX = 'mdmirwc_';
 
 	/**
 	 * Hook registration for invalidation.
@@ -98,7 +98,7 @@ class Cache {
 		 * @param int        $ttl     Seconds (default HOUR_IN_SECONDS).
 		 * @param WC_Product $product Product being cached.
 		 */
-		$ttl = (int) apply_filters( 'product_markdown_mirror_cache_ttl', HOUR_IN_SECONDS, $product );
+		$ttl = (int) apply_filters( 'mdmirwc_cache_ttl', HOUR_IN_SECONDS, $product );
 
 		set_transient( $this->key( $product->get_id() ), (string) $markdown, max( 60, $ttl ) );
 	}
@@ -159,7 +159,7 @@ class Cache {
 		 * @param int      $ttl  Seconds (default HOUR_IN_SECONDS).
 		 * @param \WP_Term $term Term being cached.
 		 */
-		$ttl = (int) apply_filters( 'product_markdown_mirror_term_cache_ttl', HOUR_IN_SECONDS, $term );
+		$ttl = (int) apply_filters( 'mdmirwc_term_cache_ttl', HOUR_IN_SECONDS, $term );
 
 		set_transient( $this->term_key( $term, (int) $page ), (string) $markdown, max( 60, $ttl ) );
 	}
@@ -171,9 +171,9 @@ class Cache {
 	 * @return void
 	 */
 	public function bump_term_version( $term_id ) {
-		$version = (int) get_term_meta( (int) $term_id, 'product_markdown_mirror_ver', true );
+		$version = (int) get_term_meta( (int) $term_id, 'mdmirwc_ver', true );
 
-		update_term_meta( (int) $term_id, 'product_markdown_mirror_ver', $version + 1 );
+		update_term_meta( (int) $term_id, 'mdmirwc_ver', $version + 1 );
 	}
 
 	/**
@@ -225,7 +225,7 @@ class Cache {
 	 */
 	private function term_key( \WP_Term $term, $page ) {
 		$generation = (int) get_option( self::GENERATION_OPTION, 1 );
-		$version    = (int) get_term_meta( $term->term_id, 'product_markdown_mirror_ver', true );
+		$version    = (int) get_term_meta( $term->term_id, 'mdmirwc_ver', true );
 
 		return self::KEY_PREFIX . $generation . '_term_' . $term->taxonomy . '_' . $term->term_id . '_v' . $version . '_p' . max( 1, $page );
 	}

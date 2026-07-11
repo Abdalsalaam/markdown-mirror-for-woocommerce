@@ -5,7 +5,7 @@
  * Values match @wordpress/env defaults for the tests environment; each can be
  * overridden with an environment variable for other setups (CI).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
 define( 'DB_NAME', getenv( 'WP_TESTS_DB_NAME' ) ? getenv( 'WP_TESTS_DB_NAME' ) : 'tests-wordpress' );

@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap: WordPress test suite (wp-phpunit) + WooCommerce + this plugin.
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
 $pmm_plugin_dir = dirname( __DIR__ );
@@ -51,7 +51,7 @@ tests_add_filter(
 	'muplugins_loaded',
 	static function () use ( $pmm_plugin_dir ) {
 		require_once pmm_locate_woocommerce( dirname( $pmm_plugin_dir ) );
-		require_once $pmm_plugin_dir . '/product-markdown-mirror.php';
+		require_once $pmm_plugin_dir . '/markdown-mirror-for-woocommerce.php';
 	}
 );
 

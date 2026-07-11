@@ -2,10 +2,10 @@
 /**
  * Response: an immutable HTTP response the router builds and sends.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 defined( 'ABSPATH' ) || exit;
 

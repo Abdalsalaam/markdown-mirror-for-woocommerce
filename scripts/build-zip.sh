@@ -4,7 +4,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-SLUG="product-markdown-mirror"
+SLUG="markdown-mirror-for-woocommerce"
 DIST="dist"
 STAGE="$DIST/$SLUG"
 

@@ -14,9 +14,9 @@
  *
  * Run:
  *   npx wp-env run cli wp rewrite structure '/%postname%/' --hard
- *   npx wp-env run cli wp eval-file wp-content/plugins/product-markdown-mirror/scripts/wporg-screenshots-seed.php
+ *   npx wp-env run cli wp eval-file wp-content/plugins/markdown-mirror-for-woocommerce/scripts/wporg-screenshots-seed.php
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
 if ( ! class_exists( 'WooCommerce' ) ) {

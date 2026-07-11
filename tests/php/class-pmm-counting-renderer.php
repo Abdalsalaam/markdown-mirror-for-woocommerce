@@ -2,10 +2,10 @@
 /**
  * Renderer double that counts render calls (used by CacheTest).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Renderer;
+use AgentMint\MarkdownMirrorWC\Renderer;
 
 /**
  * Counts how many times render() runs.

@@ -2,11 +2,11 @@
 /**
  * Term renderer tests (T-16): taxonomy archive mirrors.
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Router;
-use AgentMint\ProductMarkdownMirror\Term_Renderer;
+use AgentMint\MarkdownMirrorWC\Router;
+use AgentMint\MarkdownMirrorWC\Term_Renderer;
 
 /**
  * Tests for Term_Renderer::render() with categories, tags, and brands.
@@ -128,7 +128,7 @@ class TermRendererTest extends WP_UnitTestCase {
 	 */
 	public function test_pagination() {
 		add_filter(
-			'product_markdown_mirror_term_page_size',
+			'mdmirwc_term_page_size',
 			static function () {
 				return 2;
 			}

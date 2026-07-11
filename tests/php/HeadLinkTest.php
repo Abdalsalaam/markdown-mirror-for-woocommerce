@@ -2,13 +2,13 @@
 /**
  * Head link and conflict detection tests (T-07).
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Conflicts;
-use AgentMint\ProductMarkdownMirror\Head_Link;
-use AgentMint\ProductMarkdownMirror\Router;
-use AgentMint\ProductMarkdownMirror\Settings;
+use AgentMint\MarkdownMirrorWC\Conflicts;
+use AgentMint\MarkdownMirrorWC\Head_Link;
+use AgentMint\MarkdownMirrorWC\Router;
+use AgentMint\MarkdownMirrorWC\Settings;
 
 /**
  * Tests for the rel=alternate head link and the conflict detector.
@@ -105,7 +105,7 @@ class HeadLinkTest extends WP_UnitTestCase {
 	public function test_no_output_for_excluded_product() {
 		$product = $this->make_product();
 
-		add_filter( 'product_markdown_mirror_is_mirrored', '__return_false' );
+		add_filter( 'mdmirwc_is_mirrored', '__return_false' );
 
 		$head_link = new Head_Link();
 
@@ -182,7 +182,7 @@ class HeadLinkTest extends WP_UnitTestCase {
 		$this->assertSame( array(), $conflicts->detect() );
 
 		add_filter(
-			'product_markdown_mirror_conflicting_plugins',
+			'mdmirwc_conflicting_plugins',
 			static function ( $slugs ) {
 				$slugs[] = 'fake-md-server';
 				return $slugs;

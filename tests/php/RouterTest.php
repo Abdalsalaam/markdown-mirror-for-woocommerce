@@ -2,11 +2,11 @@
 /**
  * Router and response tests (T-06): rewrite rules, query var, serving, honest 404s, headers.
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Router;
-use AgentMint\ProductMarkdownMirror\Settings;
+use AgentMint\MarkdownMirrorWC\Router;
+use AgentMint\MarkdownMirrorWC\Settings;
 
 /**
  * Tests for Router::handle_request() and rewrite registration.
@@ -173,7 +173,7 @@ class RouterTest extends WP_UnitTestCase {
 		$product = $this->make_product();
 
 		add_filter(
-			'product_markdown_mirror_is_mirrored',
+			'mdmirwc_is_mirrored',
 			static function ( $mirrored, $checked ) use ( $product ) {
 				if ( $checked->get_id() === $product->get_id() ) {
 					return false;
@@ -216,11 +216,11 @@ class RouterTest extends WP_UnitTestCase {
 	 * The deferred activation flush flag is consumed exactly once.
 	 */
 	public function test_activation_flush_flag_consumed() {
-		update_option( 'product_markdown_mirror_flush_needed', 'yes', false );
+		update_option( 'mdmirwc_flush_needed', 'yes', false );
 
 		$this->router->maybe_flush_rules();
 
-		$this->assertFalse( get_option( 'product_markdown_mirror_flush_needed' ) );
+		$this->assertFalse( get_option( 'mdmirwc_flush_needed' ) );
 	}
 
 	/**

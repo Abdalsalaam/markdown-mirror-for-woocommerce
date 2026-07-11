@@ -2,10 +2,10 @@
 /**
  * Conflicts: detects other active .md-serving plugins.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -32,7 +32,7 @@ class Conflicts {
 		 *
 		 * @param string[] $slugs Plugin directory slugs.
 		 */
-		$known = apply_filters( 'product_markdown_mirror_conflicting_plugins', array( 'markdown-mirror' ) );
+		$known = apply_filters( 'mdmirwc_conflicting_plugins', array( 'markdown-mirror' ) );
 
 		$active   = (array) get_option( 'active_plugins', array() );
 		$detected = array();

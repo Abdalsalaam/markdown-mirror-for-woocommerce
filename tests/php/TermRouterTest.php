@@ -2,11 +2,11 @@
 /**
  * Term router tests (T-17): taxonomy rules, hierarchical paths, honest 404s.
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Settings;
-use AgentMint\ProductMarkdownMirror\Term_Router;
+use AgentMint\MarkdownMirrorWC\Settings;
+use AgentMint\MarkdownMirrorWC\Term_Router;
 
 /**
  * Tests for Term_Router::handle_term_request() and rule registration.
@@ -164,9 +164,9 @@ class TermRouterTest extends WP_UnitTestCase {
 
 		$this->assertSame( 404, $this->router->handle_term_request( 'product_cat', $term->slug, 99 )->get_status() );
 
-		add_filter( 'product_markdown_mirror_term_is_mirrored', '__return_false' );
+		add_filter( 'mdmirwc_term_is_mirrored', '__return_false' );
 		$this->assertSame( 404, $this->router->handle_term_request( 'product_cat', $term->slug, 1 )->get_status() );
-		remove_filter( 'product_markdown_mirror_term_is_mirrored', '__return_false' );
+		remove_filter( 'mdmirwc_term_is_mirrored', '__return_false' );
 	}
 
 	/**
@@ -190,7 +190,7 @@ class TermRouterTest extends WP_UnitTestCase {
 	 */
 	public function test_serves_page_two() {
 		add_filter(
-			'product_markdown_mirror_term_page_size',
+			'mdmirwc_term_page_size',
 			static function () {
 				return 2;
 			}
@@ -214,7 +214,7 @@ class TermRouterTest extends WP_UnitTestCase {
 		$term = $this->make_category( 'Cached Router Cat' );
 		$this->make_product( 'Cache Filler', array( $term->term_id ) );
 
-		$cache = new AgentMint\ProductMarkdownMirror\Cache();
+		$cache = new AgentMint\MarkdownMirrorWC\Cache();
 		$cache->set_term_mirror( $term, 1, '# CACHED SENTINEL' );
 
 		$response = $this->router->handle_term_request( 'product_cat', $term->slug, 1 );

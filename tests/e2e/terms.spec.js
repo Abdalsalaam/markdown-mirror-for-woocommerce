@@ -37,9 +37,9 @@ function lastLine( output ) {
 
 test.describe( 'Taxonomy mirrors', () => {
 	test.beforeAll( () => {
-		wp( 'plugin activate product-markdown-mirror' );
+		wp( 'plugin activate markdown-mirror-for-woocommerce' );
 		wp(
-			`option update product_markdown_mirror_settings '{"enabled":"yes","mirror_categories":"yes","mirror_tags":"yes"}' --format=json`
+			`option update mdmirwc_settings '{"enabled":"yes","mirror_categories":"yes","mirror_tags":"yes"}' --format=json`
 		);
 		wp( 'rewrite structure /%postname%/ --hard' );
 
@@ -148,14 +148,14 @@ test.describe( 'Taxonomy mirrors', () => {
 		request,
 	} ) => {
 		wp(
-			`option update product_markdown_mirror_settings '{"enabled":"yes","mirror_categories":"no","mirror_tags":"yes"}' --format=json`
+			`option update mdmirwc_settings '{"enabled":"yes","mirror_categories":"no","mirror_tags":"yes"}' --format=json`
 		);
 
 		const off = await request.get( `/product-category/${ PARENT }.md` );
 		expect( off.status() ).toBe( 404 );
 
 		wp(
-			`option update product_markdown_mirror_settings '{"enabled":"yes","mirror_categories":"yes","mirror_tags":"yes"}' --format=json`
+			`option update mdmirwc_settings '{"enabled":"yes","mirror_categories":"yes","mirror_tags":"yes"}' --format=json`
 		);
 
 		const on = await request.get( `/product-category/${ PARENT }.md` );

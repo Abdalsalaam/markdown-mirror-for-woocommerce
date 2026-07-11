@@ -2,10 +2,10 @@
 /**
  * Renderer: turns a WC_Product into the Markdown mirror document.
  *
- * @package AgentMint\ProductMarkdownMirror
+ * @package AgentMint\MarkdownMirrorWC
  */
 
-namespace AgentMint\ProductMarkdownMirror;
+namespace AgentMint\MarkdownMirrorWC;
 
 use WC_Product;
 
@@ -71,7 +71,7 @@ class Renderer {
 		 * @param array<string, string> $sections Section name => Markdown.
 		 * @param WC_Product            $product  Product being rendered.
 		 */
-		$sections = apply_filters( 'product_markdown_mirror_sections', $sections, $product );
+		$sections = apply_filters( 'mdmirwc_sections', $sections, $product );
 
 		$document = implode( "\n\n", array_filter( array_map( 'trim', $sections ) ) );
 
@@ -83,7 +83,7 @@ class Renderer {
 		 * @param string     $document Full Markdown document.
 		 * @param WC_Product $product  Product being rendered.
 		 */
-		return apply_filters( 'product_markdown_mirror_document', $document, $product );
+		return apply_filters( 'mdmirwc_document', $document, $product );
 	}
 
 	/**
@@ -391,7 +391,7 @@ class Renderer {
 		 * @param int        $max_variants Maximum variation lines (default 50).
 		 * @param WC_Product $product      Product being rendered.
 		 */
-		$cap = (int) apply_filters( 'product_markdown_mirror_max_variants', 50, $product );
+		$cap = (int) apply_filters( 'mdmirwc_max_variants', 50, $product );
 		$cap = max( 1, $cap );
 
 		$lines = array();

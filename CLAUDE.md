@@ -1,8 +1,10 @@
-# CLAUDE.md - product-markdown-mirror operating rules
+# CLAUDE.md - markdown-mirror-for-woocommerce operating rules
 
 ## What this is
 
-Free WooCommerce plugin "Product Markdown Mirror" (Author: AgentMint; slug `product-markdown-mirror`):
+Free WooCommerce plugin "Markdown Mirror for WooCommerce" (Author: AgentMint; slug
+`markdown-mirror-for-woocommerce`; renamed from "Product Markdown Mirror" on 2026-07-11 per wp.org
+review - name similarity with the existing `markdown-mirror` plugin plus the common-word prefix flag):
 serves read-only Markdown mirrors of product pages at `{product-url}.md`. Spec:
 https://agentmint.net/blueprints/product-markdown-mirror/. Target: WordPress.org submission that
 passes plugin review, Plugin Check, PHPCS, security review, and E2E.
@@ -13,7 +15,7 @@ passes plugin review, Plugin Check, PHPCS, security review, and E2E.
    (small fix-up commits allowed).
 2. Standards: PHPCS `WooCommerce-Core` ruleset (phpcs.xml.dist here), WordPress + WooCommerce coding
    standards, PHP 7.4 compatible syntax, i18n on every user-facing string (text domain
-   `product-markdown-mirror`), docblocks on everything public.
+   `markdown-mirror-for-woocommerce`), docblocks on everything public.
 3. Security: capability checks + nonces on any state change, sanitize early, escape late, no direct
    superglobal trust, `$wpdb->prepare()` if SQL ever appears (it should not need to), no remote calls.
 4. Product rules that outrank convenience: read-only store access; virtual
@@ -22,9 +24,9 @@ passes plugin review, Plugin Check, PHPCS, security review, and E2E.
    the honest-boundary sentence stays in readme + settings); no marketing notices; no invented data,
    ever (a missing value means the section is omitted).
 5. Style: namespace
-   `AgentMint\ProductMarkdownMirror`, `includes/class-*.php`, `Main::instance()`, guarded lifecycle
+   `AgentMint\MarkdownMirrorWC`, `includes/class-*.php`, `Main::instance()`, guarded lifecycle
    hooks, tabs per WPCS, Yoda conditions per ruleset. Prefix ALL globals/options/hooks/transients
-   with `product_markdown_mirror_`.
+   with `mdmirwc_` (`MDMIRWC_` for constants; coined per wp.org prefix rules, 2026-07-11).
 6. Public copy (readme.txt, settings screen text): plain honest English, straight quotes and plain
    hyphens (no em/en dashes, ellipsis chars, curly quotes), no superlatives, no fabricated numbers,
    no internal planning references in shipped strings.

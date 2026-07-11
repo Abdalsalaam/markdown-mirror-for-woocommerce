@@ -2,10 +2,10 @@
 /**
  * Environment smoke tests: the harness boots WordPress, WooCommerce, and the plugin.
  *
- * @package AgentMint\ProductMarkdownMirror\Tests
+ * @package AgentMint\MarkdownMirrorWC\Tests
  */
 
-use AgentMint\ProductMarkdownMirror\Main;
+use AgentMint\MarkdownMirrorWC\Main;
 
 /**
  * Smoke tests for the test harness itself.
@@ -31,9 +31,9 @@ class SmokeTest extends WP_UnitTestCase {
 	 * The plugin booted: singleton exists, components loaded, constants defined.
 	 */
 	public function test_plugin_is_loaded() {
-		$this->assertTrue( defined( 'PRODUCT_MARKDOWN_MIRROR_VERSION' ) );
-		$this->assertInstanceOf( Main::class, product_markdown_mirror() );
-		$this->assertSame( product_markdown_mirror(), Main::instance() );
+		$this->assertTrue( defined( 'MDMIRWC_VERSION' ) );
+		$this->assertInstanceOf( Main::class, mdmirwc() );
+		$this->assertSame( mdmirwc(), Main::instance() );
 		$this->assertTrue( Main::instance()->is_loaded() );
 	}
 
