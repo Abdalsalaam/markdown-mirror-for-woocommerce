@@ -177,7 +177,7 @@ class Cache {
 	}
 
 	/**
-	 * created_term/edited_term hook: bump the term and its parent.
+	 * Bump a term and its parent on created_term/edited_term.
 	 *
 	 * @param int    $term_id  Term ID.
 	 * @param int    $tt_id    Term taxonomy ID.
@@ -198,7 +198,7 @@ class Cache {
 	}
 
 	/**
-	 * delete_term hook: bump the deleted term's parent (its child list changed).
+	 * Bump the deleted term's parent on delete_term (its child list changed).
 	 *
 	 * @param int      $term_id      Term ID.
 	 * @param int      $tt_id        Term taxonomy ID.

@@ -47,11 +47,11 @@ class TermRouterTest extends WP_UnitTestCase {
 	 * Create a product category.
 	 *
 	 * @param string $name   Name.
-	 * @param int    $parent Parent ID.
+	 * @param int    $parent_id Parent ID.
 	 * @return WP_Term
 	 */
-	private function make_category( $name, $parent = 0 ) {
-		$result = wp_insert_term( $name, 'product_cat', array( 'parent' => $parent ) );
+	private function make_category( $name, $parent_id = 0 ) {
+		$result = wp_insert_term( $name, 'product_cat', array( 'parent' => $parent_id ) );
 		return get_term( $result['term_id'], 'product_cat' );
 	}
 
@@ -92,10 +92,10 @@ class TermRouterTest extends WP_UnitTestCase {
 		$tag_rules = 0;
 		foreach ( array_keys( (array) $wp_rewrite->extra_rules_top ) as $regex ) {
 			if ( 0 === strpos( $regex, '^' . $cat_base . '/' ) ) {
-				$cat_rules++;
+				++$cat_rules;
 			}
 			if ( 0 === strpos( $regex, '^' . $tag_base . '/' ) ) {
-				$tag_rules++;
+				++$tag_rules;
 			}
 		}
 

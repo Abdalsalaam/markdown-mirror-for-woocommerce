@@ -17,16 +17,16 @@ class TermRendererTest extends WP_UnitTestCase {
 	 * Create a product category term.
 	 *
 	 * @param string $name   Term name.
-	 * @param int    $parent Parent term ID.
+	 * @param int    $parent_id Parent term ID.
 	 * @param string $desc   Description.
 	 * @return WP_Term
 	 */
-	private function make_category( $name, $parent = 0, $desc = '' ) {
+	private function make_category( $name, $parent_id = 0, $desc = '' ) {
 		$result = wp_insert_term(
 			$name,
 			'product_cat',
 			array(
-				'parent'      => $parent,
+				'parent'      => $parent_id,
 				'description' => $desc,
 			)
 		);

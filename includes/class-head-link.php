@@ -69,7 +69,17 @@ class Head_Link {
 			return;
 		}
 
-		/** This filter is documented in includes/class-term-router.php */
+		/**
+		 * Filter whether a term archive gets a Markdown mirror.
+		 *
+		 * Documented in full in includes/class-term-router.php; applied here
+		 * so the discovery link and the route always agree.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param bool     $mirrored Whether the term is mirrored.
+		 * @param \WP_Term $term     Term being rendered.
+		 */
 		if ( ! apply_filters( 'product_markdown_mirror_term_is_mirrored', true, $term ) ) {
 			return;
 		}
