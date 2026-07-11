@@ -39,10 +39,13 @@ class Renderer {
 		$sections = array(
 			'header'         => $this->section_header( $product ),
 			'identifiers'    => $this->section_identifiers( $product ),
+			'classification' => $this->section_classification( $product ),
 			'specifications' => $this->section_specifications( $product ),
 			'price'          => $this->section_price( $product ),
 			'availability'   => $this->section_availability( $product ),
 			'variants'       => $this->section_variants( $product ),
+			'reviews'        => $this->section_reviews( $product ),
+			'images'         => $this->section_images( $product ),
 			'description'    => $args['include_description'] ? $this->section_description( $product ) : '',
 			'footer'         => $this->section_footer( $product ),
 		);
@@ -127,6 +130,108 @@ class Renderer {
 		}
 
 		return "## Identifiers\n" . implode( "\n", $lines );
+	}
+
+	/**
+	 * Classification: categories (hierarchical paths) and tags with links.
+	 *
+	 * Links point at the term's .md mirror only when that group is enabled;
+	 * otherwise at the always-valid HTML archive, so the mirror never links a
+	 * URL that would 404.
+	 *
+	 * @param WC_Product $product Product.
+	 * @return string
+	 */
+	private function section_classification( WC_Product $product ) {
+		$lines = array();
+
+		$categories = $this->term_lines( $product->get_id(), 'product_cat', true );
+		if ( '' !== $categories ) {
+			$lines[] = '- Categories: ' . $categories;
+		}
+
+		$tags = $this->term_lines( $product->get_id(), 'product_tag', false );
+		if ( '' !== $tags ) {
+			$lines[] = '- Tags: ' . $tags;
+		}
+
+		if ( empty( $lines ) ) {
+			return '';
+		}
+
+		return "## Classification\n" . implode( "\n", $lines );
+	}
+
+	/**
+	 * Comma-separated term entries for a taxonomy: path name plus link.
+	 *
+	 * @param int    $product_id   Product ID.
+	 * @param string $taxonomy     Taxonomy name.
+	 * @param bool   $hierarchical Whether to render ancestor paths.
+	 * @return string
+	 */
+	private function term_lines( $product_id, $taxonomy, $hierarchical ) {
+		if ( ! taxonomy_exists( $taxonomy ) ) {
+			return '';
+		}
+
+		$terms = get_the_terms( $product_id, $taxonomy );
+
+		if ( ! is_array( $terms ) || empty( $terms ) ) {
+			return '';
+		}
+
+		$entries = array();
+
+		foreach ( $terms as $term ) {
+			$path = array( $this->single_line( $term->name ) );
+
+			if ( $hierarchical ) {
+				foreach ( get_ancestors( $term->term_id, $taxonomy, 'taxonomy' ) as $ancestor_id ) {
+					$ancestor = get_term( $ancestor_id, $taxonomy );
+
+					if ( $ancestor instanceof \WP_Term ) {
+						array_unshift( $path, $this->single_line( $ancestor->name ) );
+					}
+				}
+			}
+
+			$link = Settings::term_mirrors_enabled( $taxonomy )
+				? Router::term_mirror_url( $term )
+				: get_term_link( $term );
+
+			$entry = implode( ' > ', $path );
+
+			if ( is_string( $link ) && '' !== $link ) {
+				$entry .= ' (' . $link . ')';
+			}
+
+			$entries[] = $entry;
+		}
+
+		return implode( ', ', $entries );
+	}
+
+	/**
+	 * Reviews: real average rating and count, only when reviews exist.
+	 *
+	 * @param WC_Product $product Product.
+	 * @return string
+	 */
+	private function section_reviews( WC_Product $product ) {
+		if ( function_exists( 'wc_review_ratings_enabled' ) && ! wc_review_ratings_enabled() ) {
+			return '';
+		}
+
+		$count = (int) $product->get_review_count();
+
+		if ( $count < 1 ) {
+			return '';
+		}
+
+		$average = wc_format_decimal( $product->get_average_rating(), 2, true );
+
+		return "## Reviews\n- Rating: " . $average . " of 5\n- Reviews: " . $count;
 	}
 
 	/**
@@ -345,19 +450,62 @@ class Renderer {
 	}
 
 	/**
-	 * Short description as one plain-text block, tags stripped.
+	 * Images: main and gallery as Markdown image lines with alt text.
+	 *
+	 * @param WC_Product $product Product.
+	 * @return string
+	 */
+	private function section_images( WC_Product $product ) {
+		$image_ids = array();
+
+		$main_id = (int) $product->get_image_id();
+		if ( $main_id ) {
+			$image_ids[] = $main_id;
+		}
+
+		foreach ( $product->get_gallery_image_ids() as $gallery_id ) {
+			$image_ids[] = (int) $gallery_id;
+		}
+
+		$lines = array();
+
+		foreach ( array_unique( $image_ids ) as $image_id ) {
+			$url = wp_get_attachment_url( $image_id );
+
+			if ( ! $url ) {
+				continue;
+			}
+
+			$alt     = $this->single_line( get_post_meta( $image_id, '_wp_attachment_image_alt', true ) );
+			$lines[] = '![' . $alt . '](' . $url . ')';
+		}
+
+		if ( empty( $lines ) ) {
+			return '';
+		}
+
+		return "## Images\n" . implode( "\n", $lines );
+	}
+
+	/**
+	 * Short and full descriptions as plain-text blocks, tags stripped.
 	 *
 	 * @param WC_Product $product Product.
 	 * @return string
 	 */
 	private function section_description( WC_Product $product ) {
-		$text = $this->block_text( $product->get_short_description() );
+		$blocks = array_filter(
+			array(
+				$this->block_text( $product->get_short_description() ),
+				$this->block_text( $product->get_description() ),
+			)
+		);
 
-		if ( '' === $text ) {
+		if ( empty( $blocks ) ) {
 			return '';
 		}
 
-		return "## Description\n" . $text;
+		return "## Description\n" . implode( "\n\n", $blocks );
 	}
 
 	/**
@@ -405,6 +553,16 @@ class Renderer {
 	 * @return string
 	 */
 	protected function availability_label( WC_Product $product ) {
+		// The page's own availability text (respects the store's stock
+		// display settings, including quantities like "12 in stock").
+		if ( function_exists( 'wc_format_stock_for_display' ) && $product->managing_stock() && $product->is_in_stock() ) {
+			$display = wc_format_stock_for_display( $product );
+
+			if ( is_string( $display ) && '' !== $display ) {
+				return $this->single_line( $display );
+			}
+		}
+
 		$status = $product->get_stock_status();
 
 		if ( 'outofstock' === $status ) {

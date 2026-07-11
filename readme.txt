@@ -20,10 +20,13 @@ Example: `https://example.com/product/ceramic-dripper/` also serves `https://exa
 
 * The product name and a one-line factual summary
 * Identifiers: GTIN (WooCommerce's core field), SKU, brand
+* Classification: categories as hierarchical paths and tags, each linked to its archive (or its .md mirror when taxonomy mirrors are enabled)
 * Specifications: visible attributes, weight, dimensions
 * Price with currency, sale end dates, and the store's tax display
-* Availability, and per-variation lines for variable products
-* The product short description (optional, on by default)
+* Availability with the store's own stock display (quantities appear exactly when your store shows them), and per-variation lines for variable products
+* Reviews: the real average rating and review count, only when reviews exist
+* Images: main and gallery image URLs with their alt text
+* The product short and full descriptions as plain text (optional, on by default)
 * A canonical link back to the product page and the real last-updated date
 
 Sections with no data are omitted, never padded. Every mirror sends a canonical `Link` header pointing at your HTML page and an `X-Robots-Tag: noindex` header, so the mirror never competes with your product page in search. Each product page also gets one `rel="alternate"` link tag so agents can discover the mirror.

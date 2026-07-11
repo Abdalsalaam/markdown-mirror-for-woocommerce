@@ -218,6 +218,174 @@ class RendererTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Categories render as hierarchical paths with archive links.
+	 */
+	public function test_categories_rendered_with_hierarchy() {
+		$parent = wp_insert_term( 'Mirror Gear', 'product_cat' );
+		$child  = wp_insert_term( 'Mirror Kettles', 'product_cat', array( 'parent' => $parent['term_id'] ) );
+
+		$product = $this->make_product();
+		$product->set_category_ids( array( $child['term_id'] ) );
+		$product->save();
+
+		$markdown = $this->render( $product );
+
+		$this->assertStringContainsString( '## Classification', $markdown );
+		$this->assertStringContainsString( 'Categories: Mirror Gear > Mirror Kettles', $markdown );
+
+		$term = get_term( $child['term_id'], 'product_cat' );
+		$this->assertStringContainsString( (string) get_term_link( $term ), $markdown, 'Category links the HTML archive while term mirrors are off.' );
+	}
+
+	/**
+	 * Category links switch to .md mirrors when that group is enabled.
+	 */
+	public function test_category_links_follow_term_mirror_toggle() {
+		update_option(
+			AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME,
+			array( 'mirror_categories' => 'yes' )
+		);
+
+		$cat     = wp_insert_term( 'Toggled Cat', 'product_cat' );
+		$product = $this->make_product();
+		$product->set_category_ids( array( $cat['term_id'] ) );
+		$product->save();
+
+		$markdown = $this->render( $product );
+		$term     = get_term( $cat['term_id'], 'product_cat' );
+
+		$this->assertStringContainsString( AgentMint\ProductMarkdownMirror\Router::term_mirror_url( $term ), $markdown );
+
+		delete_option( AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME );
+	}
+
+	/**
+	 * Tags render in the Classification section.
+	 */
+	public function test_tags_rendered() {
+		$tag     = wp_insert_term( 'mirror-organic', 'product_tag' );
+		$product = $this->make_product();
+		wp_set_object_terms( $product->get_id(), array( $tag['term_id'] ), 'product_tag' );
+
+		$markdown = $this->render( $product );
+
+		$this->assertStringContainsString( 'Tags: mirror-organic', $markdown );
+	}
+
+	/**
+	 * No Classification section without terms.
+	 */
+	public function test_classification_omitted_without_terms() {
+		$markdown = $this->render( $this->make_product() );
+
+		$this->assertStringNotContainsString( '## Classification', $markdown );
+	}
+
+	/**
+	 * Review average and count render when real reviews exist.
+	 */
+	public function test_reviews_rendered_when_present() {
+		$product = $this->make_product();
+
+		self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => $product->get_id(),
+				'comment_type'     => 'review',
+				'comment_approved' => 1,
+				'comment_meta'     => array( 'rating' => 4 ),
+			)
+		);
+		self::factory()->comment->create(
+			array(
+				'comment_post_ID'  => $product->get_id(),
+				'comment_type'     => 'review',
+				'comment_approved' => 1,
+				'comment_meta'     => array( 'rating' => 5 ),
+			)
+		);
+
+		WC_Comments::clear_transients( $product->get_id() );
+
+		$markdown = $this->render( $product );
+
+		$this->assertStringContainsString( '## Reviews', $markdown );
+		$this->assertStringContainsString( 'Rating: 4.5 of 5', $markdown );
+		$this->assertStringContainsString( 'Reviews: 2', $markdown );
+	}
+
+	/**
+	 * No Reviews section when a product has no reviews.
+	 */
+	public function test_reviews_omitted_when_none() {
+		$markdown = $this->render( $this->make_product() );
+
+		$this->assertStringNotContainsString( '## Reviews', $markdown );
+	}
+
+	/**
+	 * Main and gallery images render as Markdown images with alt text.
+	 */
+	public function test_images_rendered_with_alt() {
+		$main = self::factory()->attachment->create( array( 'post_mime_type' => 'image/jpeg' ) );
+		update_post_meta( $main, '_wp_attached_file', '2026/07/mug-main.jpg' );
+		update_post_meta( $main, '_wp_attachment_image_alt', 'White ceramic mug' );
+
+		$gallery = self::factory()->attachment->create( array( 'post_mime_type' => 'image/jpeg' ) );
+		update_post_meta( $gallery, '_wp_attached_file', '2026/07/mug-side.jpg' );
+
+		$product = $this->make_product();
+		$product->set_image_id( $main );
+		$product->set_gallery_image_ids( array( $gallery ) );
+		$product->save();
+
+		$markdown = $this->render( $product );
+
+		$this->assertStringContainsString( '## Images', $markdown );
+		$this->assertStringContainsString( '![White ceramic mug](' . wp_get_attachment_url( $main ) . ')', $markdown );
+		$this->assertStringContainsString( '![](' . wp_get_attachment_url( $gallery ) . ')', $markdown );
+	}
+
+	/**
+	 * No Images section without images.
+	 */
+	public function test_images_omitted_when_none() {
+		$markdown = $this->render( $this->make_product() );
+
+		$this->assertStringNotContainsString( '## Images', $markdown );
+	}
+
+	/**
+	 * Stock quantity appears when the store displays it (managed stock).
+	 */
+	public function test_stock_quantity_shown_when_store_shows_it() {
+		update_option( 'woocommerce_stock_format', '' ); // Always show quantity.
+
+		$product = $this->make_product();
+		$product->set_manage_stock( true );
+		$product->set_stock_quantity( 12 );
+		$product->save();
+
+		$markdown = $this->render( $product );
+
+		$this->assertStringContainsString( '12 in stock', $markdown );
+	}
+
+	/**
+	 * The full description renders after the short description.
+	 */
+	public function test_full_description_included() {
+		$product = $this->make_product();
+		$product->set_description( '<p>Full details: fits <em>standard</em> drippers.</p>' );
+		$product->save();
+
+		$markdown = $this->render( $product );
+
+		$this->assertStringContainsString( 'Cone dripper for manual brewing.', $markdown );
+		$this->assertStringContainsString( 'Full details: fits standard drippers.', $markdown );
+		$this->assertStringNotContainsString( '<em>', $markdown );
+	}
+
+	/**
 	 * The document filter runs and can append content.
 	 */
 	public function test_document_filter_applies() {
