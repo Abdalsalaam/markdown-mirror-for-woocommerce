@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<ruleset name="Product Markdown Mirror">
+	<description>PHP_CodeSniffer ruleset for Product Markdown Mirror by AgentMint.</description>
+
+	<arg value="ps" />
+	<arg name="parallel" value="20" />
+	<arg name="extensions" value="php" />
+
+	<file>.</file>
+
+	<!-- Exclude paths -->
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>dist/*</exclude-pattern>
+	<exclude-pattern>tests/e2e/*</exclude-pattern>
+
+	<!-- Configs -->
+	<config name="minimum_supported_wp_version" value="6.5" />
+	<config name="testVersion" value="7.4-" />
+
+	<!-- Rules -->
+	<rule ref="WooCommerce-Core">
+		<exclude name="Generic.Commenting.Todo" />
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="product-markdown-mirror" />
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="product_markdown_mirror" />
+				<element value="PRODUCT_MARKDOWN_MIRROR" />
+				<element value="AgentMint\ProductMarkdownMirror" />
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="PHPCompatibility">
+		<exclude-pattern>tests/</exclude-pattern>
+	</rule>
+
+	<!-- Test code: relax doc and filename sniffs, as the reference plugins do. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Commenting">
+		<exclude-pattern>tests/</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>tests/</exclude-pattern>
+	</rule>
+</ruleset>
