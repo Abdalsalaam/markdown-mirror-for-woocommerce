@@ -56,7 +56,8 @@ class SettingsTest extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( array( 'enabled', 'include_description' ), array_keys( $clean ) );
+		$this->assertSame( array_keys( Settings::get_defaults() ), array_keys( $clean ), 'Sanitize must return exactly the known keys.' );
+		$this->assertArrayNotHasKey( 'evil', $clean );
 		$this->assertSame( 'yes', $clean['enabled'] );
 		$this->assertSame( 'no', $clean['include_description'] );
 	}

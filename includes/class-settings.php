@@ -48,7 +48,35 @@ class Settings {
 		return array(
 			'enabled'             => 'yes',
 			'include_description' => 'yes',
+			'mirror_categories'   => 'no',
+			'mirror_brands'       => 'no',
+			'mirror_tags'         => 'no',
 		);
+	}
+
+	/**
+	 * Whether term mirrors are enabled for a taxonomy.
+	 *
+	 * Off by default for every group: enabling public routes is the
+	 * merchant's explicit choice.
+	 *
+	 * @param string $taxonomy Taxonomy name (product_cat, product_brand, product_tag).
+	 * @return bool
+	 */
+	public static function term_mirrors_enabled( $taxonomy ) {
+		$map = array(
+			'product_cat'   => 'mirror_categories',
+			'product_brand' => 'mirror_brands',
+			'product_tag'   => 'mirror_tags',
+		);
+
+		if ( ! isset( $map[ $taxonomy ] ) ) {
+			return false;
+		}
+
+		$settings = self::get_settings();
+
+		return 'yes' === $settings[ $map[ $taxonomy ] ];
 	}
 
 	/**

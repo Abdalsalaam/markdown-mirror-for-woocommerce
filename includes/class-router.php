@@ -266,16 +266,7 @@ class Router {
 	 * @return Response
 	 */
 	private function not_found() {
-		return new Response(
-			404,
-			array(
-				'Content-Type'           => 'text/plain; charset=UTF-8',
-				'X-Content-Type-Options' => 'nosniff',
-				'X-Robots-Tag'           => 'noindex',
-				'Cache-Control'          => 'no-cache',
-			),
-			"Not found.\n"
-		);
+		return Response::not_found();
 	}
 
 	/**

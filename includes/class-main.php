@@ -104,6 +104,7 @@ final class Main {
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-term-renderer.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-response.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-router.php';
+		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-term-router.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-cache.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-head-link.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-conflicts.php';
@@ -123,6 +124,9 @@ final class Main {
 
 		$router = new Router( new Renderer(), $cache );
 		$router->register_hooks();
+
+		$term_router = new Term_Router( new Term_Renderer() );
+		$term_router->register_hooks();
 
 		$head_link = new Head_Link();
 		$head_link->register_hooks();

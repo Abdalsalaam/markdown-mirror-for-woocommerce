@@ -79,6 +79,24 @@ class Response {
 	}
 
 	/**
+	 * The shared honest-404 response.
+	 *
+	 * @return Response
+	 */
+	public static function not_found() {
+		return new self(
+			404,
+			array(
+				'Content-Type'           => 'text/plain; charset=UTF-8',
+				'X-Content-Type-Options' => 'nosniff',
+				'X-Robots-Tag'           => 'noindex',
+				'Cache-Control'          => 'no-cache',
+			),
+			"Not found.\n"
+		);
+	}
+
+	/**
 	 * Send the response and terminate the request.
 	 *
 	 * @return void
