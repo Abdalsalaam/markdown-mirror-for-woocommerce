@@ -129,6 +129,65 @@ class SettingsTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Taxonomy toggle fields register for existing taxonomies.
+	 */
+	public function test_taxonomy_toggle_fields_registered() {
+		global $wp_settings_fields;
+
+		$settings = new Settings();
+		$settings->register_settings();
+
+		$fields = isset( $wp_settings_fields[ Settings::PAGE_SLUG ]['product_markdown_mirror_terms'] )
+			? $wp_settings_fields[ Settings::PAGE_SLUG ]['product_markdown_mirror_terms']
+			: array();
+
+		$this->assertArrayHasKey( 'mirror_categories', $fields );
+		$this->assertArrayHasKey( 'mirror_tags', $fields );
+
+		if ( taxonomy_exists( 'product_brand' ) ) {
+			$this->assertArrayHasKey( 'mirror_brands', $fields );
+		} else {
+			$this->assertArrayNotHasKey( 'mirror_brands', $fields );
+		}
+
+		unregister_setting( Settings::OPTION_GROUP, Settings::OPTION_NAME );
+	}
+
+	/**
+	 * Saving settings queues the deferred rewrite flush (routes may change).
+	 */
+	public function test_settings_change_queues_rewrite_flush() {
+		delete_option( 'product_markdown_mirror_flush_needed' );
+
+		$settings = new Settings();
+		$settings->register_hooks();
+
+		// First save fires add_option_*.
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
+		$this->assertSame( 'yes', get_option( 'product_markdown_mirror_flush_needed' ) );
+
+		delete_option( 'product_markdown_mirror_flush_needed' );
+
+		// Subsequent change fires update_option_*.
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'no' ) );
+		$this->assertSame( 'yes', get_option( 'product_markdown_mirror_flush_needed' ) );
+	}
+
+	/**
+	 * term_mirrors_enabled: defaults off, unknown taxonomies always false.
+	 */
+	public function test_term_mirrors_enabled_defaults() {
+		$this->assertFalse( Settings::term_mirrors_enabled( 'product_cat' ) );
+		$this->assertFalse( Settings::term_mirrors_enabled( 'product_tag' ) );
+		$this->assertFalse( Settings::term_mirrors_enabled( 'post_tag' ) );
+
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
+
+		$this->assertTrue( Settings::term_mirrors_enabled( 'product_cat' ) );
+		$this->assertFalse( Settings::term_mirrors_enabled( 'product_tag' ) );
+	}
+
+	/**
 	 * register_hooks() wires the admin actions.
 	 */
 	public function test_hooks_are_registered() {

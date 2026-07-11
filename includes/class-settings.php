@@ -125,6 +125,21 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
 		add_filter( 'option_page_capability_' . self::OPTION_GROUP, array( $this, 'option_page_capability' ) );
+
+		// Toggling taxonomy groups adds or removes public routes, so a
+		// deferred rewrite flush is queued whenever the option changes
+		// (update_option_* skips first-time saves, hence both hooks).
+		add_action( 'update_option_' . self::OPTION_NAME, array( $this, 'queue_rewrite_flush' ) );
+		add_action( 'add_option_' . self::OPTION_NAME, array( $this, 'queue_rewrite_flush' ) );
+	}
+
+	/**
+	 * Queue the deferred rewrite flush consumed on the next request's init.
+	 *
+	 * @return void
+	 */
+	public function queue_rewrite_flush() {
+		update_option( 'product_markdown_mirror_flush_needed', 'yes', false );
 	}
 
 	/**
@@ -219,6 +234,90 @@ class Settings {
 			array( $this, 'render_include_description_field' ),
 			self::PAGE_SLUG,
 			'product_markdown_mirror_main'
+		);
+
+		add_settings_section(
+			'product_markdown_mirror_terms',
+			__( 'Taxonomy mirrors', 'product-markdown-mirror' ),
+			array( $this, 'render_terms_section_intro' ),
+			self::PAGE_SLUG
+		);
+
+		foreach ( $this->taxonomy_fields() as $key => $field ) {
+			if ( ! taxonomy_exists( $field['taxonomy'] ) ) {
+				continue;
+			}
+
+			add_settings_field(
+				$key,
+				$field['label'],
+				array( $this, 'render_taxonomy_field' ),
+				self::PAGE_SLUG,
+				'product_markdown_mirror_terms',
+				array(
+					'key'         => $key,
+					'description' => $field['description'],
+				)
+			);
+		}
+	}
+
+	/**
+	 * The taxonomy toggle field definitions.
+	 *
+	 * @return array<string, array{taxonomy: string, label: string, description: string}>
+	 */
+	private function taxonomy_fields() {
+		return array(
+			'mirror_categories' => array(
+				'taxonomy'    => 'product_cat',
+				'label'       => __( 'Category mirrors', 'product-markdown-mirror' ),
+				'description' => __( 'Serve .md mirrors for product category archives', 'product-markdown-mirror' ),
+			),
+			'mirror_brands'     => array(
+				'taxonomy'    => 'product_brand',
+				'label'       => __( 'Brand mirrors', 'product-markdown-mirror' ),
+				'description' => __( 'Serve .md mirrors for brand archives', 'product-markdown-mirror' ),
+			),
+			'mirror_tags'       => array(
+				'taxonomy'    => 'product_tag',
+				'label'       => __( 'Tag mirrors', 'product-markdown-mirror' ),
+				'description' => __( 'Serve .md mirrors for product tag archives', 'product-markdown-mirror' ),
+			),
+		);
+	}
+
+	/**
+	 * Taxonomy mirrors section intro.
+	 *
+	 * @return void
+	 */
+	public function render_terms_section_intro() {
+		echo '<p>';
+		esc_html_e( 'Each group adds public .md mirrors for its archive pages: term name, description, subcategories, and a paginated product list (100 per page). All groups are off until you enable them.', 'product-markdown-mirror' );
+		echo '</p>';
+	}
+
+	/**
+	 * Render one taxonomy toggle field.
+	 *
+	 * @param array $args Field args: key, description.
+	 * @return void
+	 */
+	public function render_taxonomy_field( $args ) {
+		$key      = isset( $args['key'] ) ? (string) $args['key'] : '';
+		$settings = self::get_settings();
+
+		if ( '' === $key || ! array_key_exists( $key, $settings ) ) {
+			return;
+		}
+
+		printf(
+			'<label><input type="checkbox" name="%1$s[%2$s]" value="yes" %3$s /> %4$s</label>',
+			esc_attr( self::OPTION_NAME ),
+			esc_attr( $key ),
+			checked( 'yes', $settings[ $key ], false ),
+			esc_html( isset( $args['description'] ) ? (string) $args['description'] : '' )
 		);
 	}
 
