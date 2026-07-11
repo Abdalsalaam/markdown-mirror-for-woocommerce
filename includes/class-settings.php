@@ -96,6 +96,19 @@ class Settings {
 	public function register_hooks() {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_menu', array( $this, 'add_menu' ) );
+		add_filter( 'option_page_capability_' . self::OPTION_GROUP, array( $this, 'option_page_capability' ) );
+	}
+
+	/**
+	 * Align the save capability with the menu capability.
+	 *
+	 * options.php requires manage_options by default; the page is offered to
+	 * manage_woocommerce users, so saving must be too.
+	 *
+	 * @return string
+	 */
+	public function option_page_capability() {
+		return 'manage_woocommerce';
 	}
 
 	/**

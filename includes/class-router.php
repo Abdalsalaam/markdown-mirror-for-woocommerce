@@ -226,10 +226,11 @@ class Router {
 		}
 
 		$headers = array(
-			'Content-Type'  => 'text/markdown; charset=UTF-8',
-			'Link'          => '<' . $product->get_permalink() . '>; rel="canonical"',
-			'X-Robots-Tag'  => 'noindex',
-			'Cache-Control' => 'public, max-age=' . max( 0, $max_age ),
+			'Content-Type'           => 'text/markdown; charset=UTF-8',
+			'X-Content-Type-Options' => 'nosniff',
+			'Link'                   => '<' . $product->get_permalink() . '>; rel="canonical"',
+			'X-Robots-Tag'           => 'noindex',
+			'Cache-Control'          => 'public, max-age=' . max( 0, $max_age ),
 		);
 
 		if ( $modified ) {
@@ -248,9 +249,10 @@ class Router {
 		return new Response(
 			404,
 			array(
-				'Content-Type'  => 'text/plain; charset=UTF-8',
-				'X-Robots-Tag'  => 'noindex',
-				'Cache-Control' => 'no-cache',
+				'Content-Type'           => 'text/plain; charset=UTF-8',
+				'X-Content-Type-Options' => 'nosniff',
+				'X-Robots-Tag'           => 'noindex',
+				'Cache-Control'          => 'no-cache',
 			),
 			"Not found.\n"
 		);
@@ -266,10 +268,11 @@ class Router {
 		$base       = isset( $permalinks['product_rewrite_slug'] ) ? $permalinks['product_rewrite_slug'] : 'product';
 		$base       = trim( $base, '/' );
 
-		// A %product_cat% placeholder means category segments precede the slug.
-		if ( false !== strpos( $base, '%product_cat%' ) ) {
-			$base = str_replace( '%product_cat%', '.+', $base );
-		}
+		// The base is merchant-controlled text going into a regex: quote it,
+		// with the %product_cat% placeholder widened to match any segments.
+		$base = str_replace( '%product_cat%', "\0", $base );
+		$base = preg_quote( $base, '#' );
+		$base = str_replace( preg_quote( "\0", '#' ), '.+', $base );
 
 		return $base;
 	}

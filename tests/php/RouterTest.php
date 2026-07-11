@@ -98,6 +98,7 @@ class RouterTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( '<' . $product->get_permalink() . '>; rel="canonical"', $headers['Link'] );
 		$this->assertStringContainsString( 'noindex', $headers['X-Robots-Tag'] );
 		$this->assertStringContainsString( 'max-age=', $headers['Cache-Control'] );
+		$this->assertSame( 'nosniff', $headers['X-Content-Type-Options'] );
 		$this->assertArrayHasKey( 'Last-Modified', $headers );
 
 		$this->assertStringStartsWith( '# Router Widget', $response->get_body() );
@@ -186,6 +187,42 @@ class RouterTest extends WP_UnitTestCase {
 		$response = $this->router->handle_request( $product->get_slug() );
 
 		$this->assertSame( 404, $response->get_status() );
+	}
+
+	/**
+	 * Regex metacharacters in a merchant-set product base cannot break the rule.
+	 */
+	public function test_regex_metachars_in_product_base_are_quoted() {
+		global $wp_rewrite;
+
+		update_option( 'woocommerce_permalinks', array( 'product_base' => '/shop(x)/product' ) );
+
+		$router = new Router();
+		$router->add_rules();
+
+		$found = false;
+		foreach ( (array) $wp_rewrite->extra_rules_top as $regex => $target ) {
+			if ( false !== strpos( $regex, 'shop\(x\)' ) && false !== strpos( $target, Router::QUERY_VAR ) ) {
+				$found = true;
+			}
+		}
+
+		$this->assertTrue( $found, 'Product base was not preg-quoted in the rewrite rule.' );
+
+		delete_option( 'woocommerce_permalinks' );
+	}
+
+	/**
+	 * Settings save capability is aligned to manage_woocommerce.
+	 */
+	public function test_option_page_capability_aligned() {
+		$settings = new AgentMint\ProductMarkdownMirror\Settings();
+		$settings->register_hooks();
+
+		$this->assertSame(
+			'manage_woocommerce',
+			apply_filters( 'option_page_capability_' . AgentMint\ProductMarkdownMirror\Settings::OPTION_GROUP, 'manage_options' )
+		);
 	}
 
 	/**
