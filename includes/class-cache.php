@@ -154,7 +154,7 @@ class Cache {
 		/**
 		 * Filter the server-side cache TTL for term mirrors, in seconds.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @param int      $ttl  Seconds (default HOUR_IN_SECONDS).
 		 * @param \WP_Term $term Term being cached.

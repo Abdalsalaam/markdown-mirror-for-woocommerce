@@ -4,7 +4,7 @@ Tags: markdown, ai agents, products, machine readable, woocommerce
 Requires at least: 6.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -106,20 +106,11 @@ Everything the plugin stored is removed: settings, cached mirrors, notice dismis
 
 == Changelog ==
 
-= 1.1.0 =
-* New: optional taxonomy mirrors for product categories (hierarchical paths included), brands, and tags, each behind its own toggle, all off by default.
-* New: paginated term product lists (100 per page, previous/next links, honest 404 past the last page).
-* New: rel=alternate discovery links on term archive pages.
-* New: precise term cache invalidation (term edits, parent changes, and product saves refresh the affected term mirrors only).
-* Developer: six new filters for term mirrors (see the readme filter list).
-
 = 1.0.0 =
-* Initial release: product mirrors at {product-url}.md, variable-product support with disclosed caps, rel=alternate discovery, canonical and noindex headers, short-TTL caching with full invalidation, conflict detection, complete uninstall.
+* Initial release: product mirrors at {product-url}.md with variable-product support and disclosed caps, rel=alternate discovery, canonical and noindex headers, short-TTL caching with full invalidation, conflict detection, and complete uninstall.
+* Optional taxonomy mirrors for product categories (hierarchical paths included), brands, and tags, each behind its own toggle, all off by default, with paginated product lists (100 per page, previous/next links, honest 404 past the last page) and precise cache invalidation.
 
 == Upgrade Notice ==
-
-= 1.1.0 =
-Adds optional category, brand, and tag mirrors (off by default; enable per group in settings). No behavior changes for existing product mirrors.
 
 = 1.0.0 =
 Initial release.

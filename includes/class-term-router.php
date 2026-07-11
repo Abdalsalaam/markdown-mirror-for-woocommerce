@@ -179,7 +179,7 @@ class Term_Router {
 		/**
 		 * Filter whether a term archive gets a Markdown mirror.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @param bool    $mirrored Whether the term is mirrored.
 		 * @param WP_Term $term     Term being requested.
@@ -258,7 +258,7 @@ class Term_Router {
 		/**
 		 * Filter the Cache-Control max-age for term mirror responses, in seconds.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @param int     $max_age Seconds (default 300).
 		 * @param WP_Term $term    Term being served.

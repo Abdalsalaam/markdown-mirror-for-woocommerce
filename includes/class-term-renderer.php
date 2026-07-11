@@ -36,7 +36,7 @@ class Term_Renderer extends Renderer {
 		/**
 		 * Filter the number of product lines per term mirror page.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @param int     $page_size Products per page (default 100).
 		 * @param WP_Term $term      Term being rendered.
@@ -91,7 +91,7 @@ class Term_Renderer extends Renderer {
 		/**
 		 * Filter the ordered map of term mirror sections before assembly.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, string> $sections Section name => Markdown.
 		 * @param WP_Term               $term     Term being rendered.
@@ -104,7 +104,7 @@ class Term_Renderer extends Renderer {
 		/**
 		 * Filter the assembled term mirror document.
 		 *
-		 * @since 1.1.0
+		 * @since 1.0.0
 		 *
 		 * @param string  $document Full Markdown document.
 		 * @param WP_Term $term     Term being rendered.
