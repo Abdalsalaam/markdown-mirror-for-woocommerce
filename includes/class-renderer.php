@@ -42,6 +42,7 @@ class Renderer {
 			'specifications' => $this->section_specifications( $product ),
 			'price'          => $this->section_price( $product ),
 			'availability'   => $this->section_availability( $product ),
+			'variants'       => $this->section_variants( $product ),
 			'description'    => $args['include_description'] ? $this->section_description( $product ) : '',
 			'footer'         => $this->section_footer( $product ),
 		);
@@ -88,7 +89,9 @@ class Renderer {
 			$parts[] = $price_line;
 		}
 
-		$parts[] = $this->availability_label( $product );
+		if ( ! $product->is_type( 'variable' ) ) {
+			$parts[] = $this->availability_label( $product );
+		}
 
 		return '# ' . $name . "\n\n" . '> ' . implode( '. ', array_filter( $parts ) ) . '.';
 	}
@@ -183,6 +186,10 @@ class Renderer {
 	 * @return string
 	 */
 	private function section_price( WC_Product $product ) {
+		if ( $product->is_type( 'variable' ) ) {
+			return $this->section_price_variable( $product );
+		}
+
 		if ( '' === (string) $product->get_price( 'edit' ) ) {
 			return '';
 		}
@@ -209,12 +216,131 @@ class Renderer {
 	}
 
 	/**
+	 * Price section for variable products: the real min-max display range.
+	 *
+	 * @param WC_Product $product Variable product.
+	 * @return string
+	 */
+	private function section_price_variable( WC_Product $product ) {
+		$min = $product->get_variation_price( 'min', true );
+		$max = $product->get_variation_price( 'max', true );
+
+		if ( '' === (string) $min && '' === (string) $max ) {
+			return '';
+		}
+
+		$currency = get_woocommerce_currency();
+		$decimals = wc_get_price_decimals();
+
+		if ( (float) $min === (float) $max ) {
+			$line = '- Price: ' . wc_format_decimal( $min, $decimals ) . ' ' . $currency;
+		} else {
+			$line = '- Price: ' . wc_format_decimal( $min, $decimals ) . ' to ' . wc_format_decimal( $max, $decimals ) . ' ' . $currency;
+		}
+
+		$lines = array( $line );
+
+		if ( wc_tax_enabled() ) {
+			$display = get_option( 'woocommerce_tax_display_shop', 'excl' );
+			$lines[] = '- Tax: ' . ( 'incl' === $display ? 'prices shown include tax' : 'prices shown exclude tax' );
+		}
+
+		return "## Price\n" . implode( "\n", $lines );
+	}
+
+	/**
+	 * Variants section for variable products: one line per variation.
+	 *
+	 * @param WC_Product $product Product.
+	 * @return string
+	 */
+	private function section_variants( WC_Product $product ) {
+		if ( ! $product->is_type( 'variable' ) ) {
+			return '';
+		}
+
+		$children = $product->get_children();
+		$total    = count( $children );
+
+		if ( 0 === $total ) {
+			return '';
+		}
+
+		/**
+		 * Filter the maximum number of variations rendered in the mirror.
+		 *
+		 * Bounded output keeps mirrors cheap to read; when the cap applies it
+		 * is disclosed in the output rather than silently truncating.
+		 *
+		 * @since 0.1.0
+		 *
+		 * @param int        $max_variants Maximum variation lines (default 50).
+		 * @param WC_Product $product      Product being rendered.
+		 */
+		$cap = (int) apply_filters( 'product_markdown_mirror_max_variants', 50, $product );
+		$cap = max( 1, $cap );
+
+		$lines = array();
+
+		foreach ( array_slice( $children, 0, $cap ) as $child_id ) {
+			$variation = wc_get_product( $child_id );
+
+			if ( ! $variation ) {
+				continue;
+			}
+
+			$parts = array();
+
+			$attributes = wc_get_formatted_variation( $variation, true, true, false );
+			if ( '' !== (string) $attributes ) {
+				$parts[] = $this->single_line( $attributes );
+			}
+
+			$price = $this->display_price( $variation );
+			if ( '' !== $price ) {
+				$parts[] = $price;
+			}
+
+			$parts[] = $this->availability_label( $variation );
+
+			$sku = $variation->get_sku( 'edit' );
+			if ( '' !== (string) $sku ) {
+				$parts[] = 'SKU: ' . $this->single_line( $sku );
+			}
+
+			if ( method_exists( $variation, 'get_global_unique_id' ) ) {
+				$gtin = $variation->get_global_unique_id();
+				if ( '' !== (string) $gtin ) {
+					$parts[] = 'GTIN: ' . $this->single_line( $gtin );
+				}
+			}
+
+			$lines[] = '- ' . implode( ' | ', $parts );
+		}
+
+		if ( empty( $lines ) ) {
+			return '';
+		}
+
+		if ( $total > $cap ) {
+			/* translators: 1: number of variants shown, 2: total number of variants. */
+			$lines[] = '- ' . sprintf( '(showing first %1$d of %2$d variants)', $cap, $total );
+		}
+
+		return "## Variants\n" . implode( "\n", $lines );
+	}
+
+	/**
 	 * Availability from the product stock status.
 	 *
 	 * @param WC_Product $product Product.
 	 * @return string
 	 */
 	private function section_availability( WC_Product $product ) {
+		if ( $product->is_type( 'variable' ) ) {
+			return ''; // Availability is stated per variation in the Variants section.
+		}
+
 		return "## Availability\n- Availability: " . $this->availability_label( $product );
 	}
 
