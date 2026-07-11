@@ -35,12 +35,21 @@ class Router {
 	private $renderer;
 
 	/**
+	 * Cache for rendered bodies.
+	 *
+	 * @var Cache
+	 */
+	private $cache;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Renderer|null $renderer Renderer; a fresh one is created when omitted.
+	 * @param Cache|null    $cache    Cache; a fresh one is created when omitted.
 	 */
-	public function __construct( ?Renderer $renderer = null ) {
+	public function __construct( ?Renderer $renderer = null, ?Cache $cache = null ) {
 		$this->renderer = $renderer ? $renderer : new Renderer();
+		$this->cache    = $cache ? $cache : new Cache();
 	}
 
 	/**
@@ -138,12 +147,18 @@ class Router {
 			return $this->not_found();
 		}
 
-		$markdown = $this->renderer->render(
-			$product,
-			array(
-				'include_description' => Settings::include_description(),
-			)
-		);
+		$markdown = $this->cache->get( $product );
+
+		if ( false === $markdown ) {
+			$markdown = $this->renderer->render(
+				$product,
+				array(
+					'include_description' => Settings::include_description(),
+				)
+			);
+
+			$this->cache->set( $product, $markdown );
+		}
 
 		return new Response( 200, $this->mirror_headers( $product ), $markdown . "\n" );
 	}
