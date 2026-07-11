@@ -1,0 +1,84 @@
+name: 'Release: prepare PR'
+
+# Manually run this after adding the new version's changelog entry to
+# readme.txt. It reads the newest "= X.Y.Z =" from the changelog, bumps the
+# plugin version everywhere it lives (plugin header, MDMIRWC_VERSION,
+# Stable tag, POT), and opens a release PR. Merging that PR triggers
+# "Release: publish", which builds the zip and creates the GitHub Release.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    name: Version bump PR from changelog
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read newest changelog version
+        id: version
+        run: |
+          VERSION=$(awk '/^== Changelog ==/{f=1;next} f && /^= [0-9]+\.[0-9]+/{gsub(/[= ]/,""); print; exit}' readme.txt)
+          if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+(\.[0-9]+)?$'; then
+            echo "::error::Could not parse a version from the readme.txt changelog (got: '$VERSION')."
+            exit 1
+          fi
+          CURRENT=$(grep -m1 -oE 'Version: [0-9.]+' markdown-mirror-for-woocommerce.php | cut -d' ' -f2)
+          echo "Changelog version: $VERSION / current plugin version: $CURRENT"
+          if git ls-remote --tags origin "refs/tags/v$VERSION" | grep -q .; then
+            echo "::error::Tag v$VERSION already exists - version $VERSION is already released. Add a new changelog entry first."
+            exit 1
+          fi
+          if [ "$VERSION" = "$CURRENT" ]; then
+            echo "::error::Plugin is already at $VERSION and no tag exists. Either a release PR is pending, or the publish run failed - check open PRs and past runs."
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Bump version everywhere
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          sed -i -E "s/^( \* Version: )[0-9.]+/\1$V/" markdown-mirror-for-woocommerce.php
+          sed -i -E "s/(define\( 'MDMIRWC_VERSION', ')[0-9.]+(' \);)/\1$V\2/" markdown-mirror-for-woocommerce.php
+          sed -i -E "s/^(Stable tag: )[0-9.]+/\1$V/" readme.txt
+          sed -i -E "s/(Project-Id-Version: Markdown Mirror for WooCommerce )[0-9.]+/\1$V/" languages/markdown-mirror-for-woocommerce.pot
+          git diff --stat
+
+      - name: Extract changelog section for the PR body
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          awk -v v="= $V =" '$0 == v {f=1; next} f && (/^= [0-9]/ || /^== /) {exit} f' readme.txt > /tmp/changelog.md
+          {
+            echo "Release **${V}** prepared from the readme.txt changelog."
+            echo
+            echo "## Changelog"
+            echo
+            cat /tmp/changelog.md
+            echo
+            echo "Merging this PR creates the git tag \`v${V}\` and the GitHub Release with the built zip attached."
+          } > /tmp/pr-body.md
+          cat /tmp/pr-body.md
+
+      - name: Push release branch and open PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          BRANCH="release/$V"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add markdown-mirror-for-woocommerce.php readme.txt languages/markdown-mirror-for-woocommerce.pot
+          git commit -m "release: $V"
+          git push --force origin "$BRANCH"
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq 'length')
+          if [ "$EXISTING" = "0" ]; then
+            gh pr create --title "release: $V" --body-file /tmp/pr-body.md --base main --head "$BRANCH"
+          else
+            echo "Release PR for $BRANCH already open - branch updated."
+          fi

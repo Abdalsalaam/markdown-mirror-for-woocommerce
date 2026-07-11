@@ -1,0 +1,72 @@
+name: 'Release: publish'
+
+# Runs when a release/* PR (opened by "Release: prepare PR") is merged into
+# main. Verifies the version is consistent everywhere, builds the plugin zip,
+# and creates the GitHub Release with the changelog section as notes.
+# A WordPress.org SVN deploy step will be added here later.
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Tag, build, and create the GitHub Release
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Verify version consistency
+        id: version
+        run: |
+          V="${GITHUB_HEAD_REF#release/}"
+          HEADER=$(grep -m1 -oE 'Version: [0-9.]+' markdown-mirror-for-woocommerce.php | cut -d' ' -f2)
+          DEFINE=$(grep -m1 -oE "MDMIRWC_VERSION', '[0-9.]+" markdown-mirror-for-woocommerce.php | grep -oE '[0-9.]+$')
+          STABLE=$(grep -m1 -oE 'Stable tag: [0-9.]+' readme.txt | cut -d' ' -f3)
+          CHANGELOG=$(awk '/^== Changelog ==/{f=1;next} f && /^= [0-9]+\.[0-9]+/{gsub(/[= ]/,""); print; exit}' readme.txt)
+          echo "branch=$V header=$HEADER define=$DEFINE stable=$STABLE changelog=$CHANGELOG"
+          for x in "$HEADER" "$DEFINE" "$STABLE" "$CHANGELOG"; do
+            if [ "$x" != "$V" ]; then
+              echo "::error::Version mismatch: branch says $V but files carry header=$HEADER define=$DEFINE stable=$STABLE changelog=$CHANGELOG."
+              exit 1
+            fi
+          done
+          if git ls-remote --tags origin "refs/tags/v$V" | grep -q .; then
+            echo "::error::Tag v$V already exists."
+            exit 1
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Build plugin zip
+        run: bash scripts/build-zip.sh
+
+      - name: Extract release notes from the changelog
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          awk -v v="= $V =" '$0 == v {f=1; next} f && (/^= [0-9]/ || /^== /) {exit} f' readme.txt > /tmp/notes.md
+          if ! grep -q '[^[:space:]]' /tmp/notes.md; then
+            echo "::error::No changelog notes found for $V in readme.txt."
+            exit 1
+          fi
+          cat /tmp/notes.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${{ steps.version.outputs.version }}"
+          gh release create "v$V" \
+            "dist/markdown-mirror-for-woocommerce.zip" \
+            --title "$V" \
+            --notes-file /tmp/notes.md \
+            --target "${{ github.event.pull_request.merge_commit_sha }}"
+
+      # Later: deploy this exact built zip to the WordPress.org SVN
+      # (trunk + tags/$V) once the plugin is approved in the directory.
