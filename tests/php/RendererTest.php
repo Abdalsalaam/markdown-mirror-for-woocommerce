@@ -190,13 +190,43 @@ class RendererTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * include_description=false omits the Description section.
+	 * The description toggles omit their blocks; both off omits the section.
 	 */
-	public function test_description_toggle() {
-		$product  = $this->make_product();
-		$markdown = $this->render( $product, array( 'include_description' => false ) );
+	public function test_description_toggles() {
+		$product = $this->make_product();
+		$product->set_description( '<p>Long form details.</p>' );
+		$product->save();
 
-		$this->assertStringNotContainsString( '## Description', $markdown );
+		$short_only = $this->render( $product, array( 'include_full_description' => false ) );
+		$this->assertStringContainsString( 'Cone dripper for manual brewing.', $short_only );
+		$this->assertStringNotContainsString( 'Long form details.', $short_only );
+
+		$none = $this->render(
+			$product,
+			array(
+				'include_short_description' => false,
+				'include_full_description'  => false,
+			)
+		);
+		$this->assertStringNotContainsString( '## Description', $none );
+	}
+
+	/**
+	 * Section toggles omit their sections (spot checks).
+	 */
+	public function test_section_toggles_omit_sections() {
+		$product  = $this->make_product();
+		$markdown = $this->render(
+			$product,
+			array(
+				'include_specifications' => false,
+				'include_identifiers'    => false,
+			)
+		);
+
+		$this->assertStringNotContainsString( '## Specifications', $markdown );
+		$this->assertStringNotContainsString( '## Identifiers', $markdown );
+		$this->assertStringContainsString( '## Price', $markdown );
 	}
 
 	/**
@@ -221,6 +251,11 @@ class RendererTest extends WP_UnitTestCase {
 	 * Categories render as hierarchical paths with archive links.
 	 */
 	public function test_categories_rendered_with_hierarchy() {
+		update_option(
+			AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME,
+			array( 'mirror_categories' => 'no' )
+		);
+
 		$parent = wp_insert_term( 'Mirror Gear', 'product_cat' );
 		$child  = wp_insert_term( 'Mirror Kettles', 'product_cat', array( 'parent' => $parent['term_id'] ) );
 
@@ -235,6 +270,8 @@ class RendererTest extends WP_UnitTestCase {
 
 		$term = get_term( $child['term_id'], 'product_cat' );
 		$this->assertStringContainsString( (string) get_term_link( $term ), $markdown, 'Category links the HTML archive while term mirrors are off.' );
+
+		delete_option( AgentMint\ProductMarkdownMirror\Settings::OPTION_NAME );
 	}
 
 	/**

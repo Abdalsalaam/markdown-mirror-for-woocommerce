@@ -80,7 +80,14 @@ class TermRouterTest extends WP_UnitTestCase {
 		global $wp_rewrite;
 
 		$wp_rewrite->extra_rules_top = array();
-		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
+		update_option(
+			Settings::OPTION_NAME,
+			array(
+				'mirror_categories' => 'yes',
+				'mirror_brands'     => 'no',
+				'mirror_tags'       => 'no',
+			)
+		);
 
 		$router = new Term_Router();
 		$router->add_rules();
@@ -151,7 +158,7 @@ class TermRouterTest extends WP_UnitTestCase {
 
 		$this->assertSame( 404, $this->router->handle_term_request( 'product_cat', 'no-such-term', 1 )->get_status() );
 
-		$this->assertSame( 404, $this->router->handle_term_request( 'product_tag', 'anything', 1 )->get_status(), 'product_tag serving requires the tag toggle checked per request.' );
+		$this->assertSame( 404, $this->router->handle_term_request( 'product_tag', 'anything', 1 )->get_status(), 'Unknown tag slugs 404.' );
 
 		$this->assertSame( 404, $this->router->handle_term_request( 'post_tag', 'anything', 1 )->get_status(), 'Non-product taxonomies are never served.' );
 
@@ -217,15 +224,20 @@ class TermRouterTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Toggles default off (author decision D1): fresh settings serve nothing.
+	 * Everything defaults on (author decision 2026-07-11): fresh settings serve.
+	 * Disabling a group turns it off.
 	 */
-	public function test_defaults_off() {
+	public function test_defaults_on_and_disable_works() {
 		delete_option( Settings::OPTION_NAME );
 
-		$term     = $this->make_category( 'Default Off Cat' );
+		$term     = $this->make_category( 'Default On Cat' );
 		$response = $this->router->handle_term_request( 'product_cat', $term->slug, 1 );
 
-		$this->assertSame( 404, $response->get_status() );
+		$this->assertSame( 200, $response->get_status() );
+
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'no' ) );
+
+		$this->assertSame( 404, $this->router->handle_term_request( 'product_cat', $term->slug, 1 )->get_status() );
 	}
 
 	/**

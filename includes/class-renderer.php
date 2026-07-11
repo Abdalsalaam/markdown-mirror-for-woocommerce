@@ -32,21 +32,30 @@ class Renderer {
 		$args = wp_parse_args(
 			$args,
 			array(
-				'include_description' => true,
+				'include_identifiers'       => true,
+				'include_classification'    => true,
+				'include_specifications'    => true,
+				'include_price'             => true,
+				'include_availability'      => true,
+				'include_variants'          => true,
+				'include_reviews'           => true,
+				'include_images'            => true,
+				'include_short_description' => true,
+				'include_full_description'  => true,
 			)
 		);
 
 		$sections = array(
 			'header'         => $this->section_header( $product ),
-			'identifiers'    => $this->section_identifiers( $product ),
-			'classification' => $this->section_classification( $product ),
-			'specifications' => $this->section_specifications( $product ),
-			'price'          => $this->section_price( $product ),
-			'availability'   => $this->section_availability( $product ),
-			'variants'       => $this->section_variants( $product ),
-			'reviews'        => $this->section_reviews( $product ),
-			'images'         => $this->section_images( $product ),
-			'description'    => $args['include_description'] ? $this->section_description( $product ) : '',
+			'identifiers'    => $args['include_identifiers'] ? $this->section_identifiers( $product ) : '',
+			'classification' => $args['include_classification'] ? $this->section_classification( $product ) : '',
+			'specifications' => $args['include_specifications'] ? $this->section_specifications( $product ) : '',
+			'price'          => $args['include_price'] ? $this->section_price( $product ) : '',
+			'availability'   => $args['include_availability'] ? $this->section_availability( $product ) : '',
+			'variants'       => $args['include_variants'] ? $this->section_variants( $product ) : '',
+			'reviews'        => $args['include_reviews'] ? $this->section_reviews( $product ) : '',
+			'images'         => $args['include_images'] ? $this->section_images( $product ) : '',
+			'description'    => $this->section_description( $product, $args['include_short_description'], $args['include_full_description'] ),
 			'footer'         => $this->section_footer( $product ),
 		);
 
@@ -490,14 +499,16 @@ class Renderer {
 	/**
 	 * Short and full descriptions as plain-text blocks, tags stripped.
 	 *
-	 * @param WC_Product $product Product.
+	 * @param WC_Product $product       Product.
+	 * @param bool       $include_short Whether the short description renders.
+	 * @param bool       $include_full  Whether the full description renders.
 	 * @return string
 	 */
-	private function section_description( WC_Product $product ) {
+	private function section_description( WC_Product $product, $include_short = true, $include_full = true ) {
 		$blocks = array_filter(
 			array(
-				$this->block_text( $product->get_short_description() ),
-				$this->block_text( $product->get_description() ),
+				$include_short ? $this->block_text( $product->get_short_description() ) : '',
+				$include_full ? $this->block_text( $product->get_description() ) : '',
 			)
 		);
 

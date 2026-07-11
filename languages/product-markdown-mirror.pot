@@ -9,14 +9,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-11T12:27:46+00:00\n"
+"POT-Creation-Date: 2026-07-11T12:53:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: product-markdown-mirror\n"
 
 #. Plugin Name of the plugin
-#: includes/class-settings.php:332
-#: includes/class-settings.php:394
 msgid "Product Markdown Mirror"
 msgstr ""
 
@@ -49,68 +47,125 @@ msgstr ""
 msgid "Product Markdown Mirror requires WooCommerce to be installed and active."
 msgstr ""
 
-#: includes/class-settings.php:218
-msgid "Mirror output"
+#: includes/class-settings.php:75
+msgid "Identifiers"
 msgstr ""
 
-#: includes/class-settings.php:225
-msgid "Serve product mirrors"
+#: includes/class-settings.php:76
+msgid "GTIN, SKU, and brand"
 msgstr ""
 
-#: includes/class-settings.php:233
-msgid "Include short description"
+#: includes/class-settings.php:79
+msgid "Classification"
+msgstr ""
+
+#: includes/class-settings.php:80
+msgid "Categories and tags with links"
+msgstr ""
+
+#: includes/class-settings.php:83
+msgid "Specifications"
+msgstr ""
+
+#: includes/class-settings.php:84
+msgid "Visible attributes, weight, dimensions"
+msgstr ""
+
+#: includes/class-settings.php:87
+msgid "Price"
+msgstr ""
+
+#: includes/class-settings.php:88
+msgid "Price, currency, sale windows, tax display"
+msgstr ""
+
+#: includes/class-settings.php:91
+msgid "Availability"
+msgstr ""
+
+#: includes/class-settings.php:92
+msgid "Stock status as your store displays it"
+msgstr ""
+
+#: includes/class-settings.php:95
+msgid "Variants"
+msgstr ""
+
+#: includes/class-settings.php:96
+msgid "Per-variation lines for variable products"
+msgstr ""
+
+#: includes/class-settings.php:99
+msgid "Reviews"
+msgstr ""
+
+#: includes/class-settings.php:100
+msgid "Average rating and review count"
+msgstr ""
+
+#: includes/class-settings.php:103
+msgid "Images"
+msgstr ""
+
+#: includes/class-settings.php:104
+msgid "Main and gallery image URLs with alt text"
+msgstr ""
+
+#: includes/class-settings.php:107
+msgid "Short description"
+msgstr ""
+
+#: includes/class-settings.php:108
+msgid "The product short description as plain text"
+msgstr ""
+
+#: includes/class-settings.php:111
+msgid "Full description"
+msgstr ""
+
+#: includes/class-settings.php:112
+msgid "The full product description as plain text"
 msgstr ""
 
 #: includes/class-settings.php:241
-msgid "Taxonomy mirrors"
+#: includes/class-settings.php:260
+msgid "Markdown mirrors"
 msgstr ""
 
-#: includes/class-settings.php:274
-msgid "Category mirrors"
+#: includes/class-settings.php:263
+msgid "Serves a read-only Markdown copy of product and archive pages at the page URL plus .md. Mirrors always carry exactly the facts the page shows; nothing here can make them differ. Sections with no data are omitted automatically."
 msgstr ""
 
-#: includes/class-settings.php:275
-msgid "Serve .md mirrors for product category archives"
+#: includes/class-settings.php:266
+msgid "Enable mirrors"
 msgstr ""
 
-#: includes/class-settings.php:279
-msgid "Brand mirrors"
-msgstr ""
-
-#: includes/class-settings.php:280
-msgid "Serve .md mirrors for brand archives"
-msgstr ""
-
-#: includes/class-settings.php:284
-msgid "Tag mirrors"
-msgstr ""
-
-#: includes/class-settings.php:285
-msgid "Serve .md mirrors for product tag archives"
-msgstr ""
-
-#: includes/class-settings.php:297
-msgid "Each group adds public .md mirrors for its archive pages: term name, description, subcategories, and a paginated product list (100 per page). All groups are off until you enable them."
-msgstr ""
-
-#: includes/class-settings.php:333
-msgid "Markdown Mirror"
-msgstr ""
-
-#: includes/class-settings.php:347
-msgid "Serves a read-only Markdown copy of each product page at {product-url}.md. The mirror always carries exactly the facts the product page shows; nothing here can make them differ."
-msgstr ""
-
-#: includes/class-settings.php:349
-msgid "Honest boundary: no verified public source shows a shopping agent fetches product Markdown today. Treat mirrors as inexpensive, standards-shaped groundwork, not a proven ranking lever."
-msgstr ""
-
-#: includes/class-settings.php:364
+#: includes/class-settings.php:267
 msgid "Serve .md mirrors for published products"
 msgstr ""
 
-#: includes/class-settings.php:379
-msgid "Append the product short description to each mirror"
+#: includes/class-settings.php:277
+msgid "Mirror content"
+msgstr ""
+
+#: includes/class-settings.php:290
+msgid "Category archive mirrors (hierarchical paths included)"
+msgstr ""
+
+#: includes/class-settings.php:291
+msgid "Brand archive mirrors"
+msgstr ""
+
+#: includes/class-settings.php:292
+msgid "Tag archive mirrors"
+msgstr ""
+
+#: includes/class-settings.php:302
+msgid "Taxonomy mirrors"
+msgstr ""
+
+#: includes/class-settings.php:331
+msgid "Settings"
 msgstr ""
 
 #. translators: %d: number of products in the term.

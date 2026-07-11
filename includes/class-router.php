@@ -170,12 +170,7 @@ class Router {
 		$markdown = $this->cache->get( $product );
 
 		if ( false === $markdown ) {
-			$markdown = $this->renderer->render(
-				$product,
-				array(
-					'include_description' => Settings::include_description(),
-				)
-			);
+			$markdown = $this->renderer->render( $product, Settings::product_mirror_args() );
 
 			$this->cache->set( $product, $markdown );
 		}

@@ -136,9 +136,11 @@ class HeadLinkTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * No term link while the group toggle is off (the default).
+	 * No term link while the group toggle is off.
 	 */
 	public function test_no_term_link_when_group_disabled() {
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'no' ) );
+
 		$result = wp_insert_term( 'Disabled Cat', 'product_cat' );
 		$term   = get_term( $result['term_id'], 'product_cat' );
 

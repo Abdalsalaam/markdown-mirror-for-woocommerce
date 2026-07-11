@@ -213,19 +213,6 @@ class RouterTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Settings save capability is aligned to manage_woocommerce.
-	 */
-	public function test_option_page_capability_aligned() {
-		$settings = new AgentMint\ProductMarkdownMirror\Settings();
-		$settings->register_hooks();
-
-		$this->assertSame(
-			'manage_woocommerce',
-			apply_filters( 'option_page_capability_' . AgentMint\ProductMarkdownMirror\Settings::OPTION_GROUP, 'manage_options' )
-		);
-	}
-
-	/**
 	 * The deferred activation flush flag is consumed exactly once.
 	 */
 	public function test_activation_flush_flag_consumed() {

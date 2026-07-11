@@ -27,7 +27,12 @@ class SettingsTest extends WP_UnitTestCase {
 		$settings = Settings::get_settings();
 
 		$this->assertSame( 'yes', $settings['enabled'] );
-		$this->assertSame( 'yes', $settings['include_description'] );
+		$this->assertSame( 'yes', $settings['include_full_description'] );
+		$this->assertSame( 'yes', $settings['mirror_categories'], 'Everything defaults on (author decision 2026-07-11).' );
+
+		foreach ( Settings::get_defaults() as $key => $value ) {
+			$this->assertSame( 'yes', $value, "Default for {$key} must be yes." );
+		}
 	}
 
 	/**
@@ -39,7 +44,7 @@ class SettingsTest extends WP_UnitTestCase {
 		$settings = Settings::get_settings();
 
 		$this->assertSame( 'no', $settings['enabled'] );
-		$this->assertSame( 'yes', $settings['include_description'] );
+		$this->assertSame( 'yes', $settings['include_full_description'] );
 	}
 
 	/**
@@ -50,16 +55,16 @@ class SettingsTest extends WP_UnitTestCase {
 
 		$clean = $settings->sanitize(
 			array(
-				'enabled'             => '1',
-				'include_description' => 'off',
-				'evil'                => '<script>alert(1)</script>',
+				'enabled'        => '1',
+				'include_images' => 'off',
+				'evil'           => '<script>alert(1)</script>',
 			)
 		);
 
 		$this->assertSame( array_keys( Settings::get_defaults() ), array_keys( $clean ), 'Sanitize must return exactly the known keys.' );
 		$this->assertArrayNotHasKey( 'evil', $clean );
 		$this->assertSame( 'yes', $clean['enabled'] );
-		$this->assertSame( 'no', $clean['include_description'] );
+		$this->assertSame( 'no', $clean['include_images'] );
 	}
 
 	/**
@@ -71,7 +76,7 @@ class SettingsTest extends WP_UnitTestCase {
 		$clean = $settings->sanitize( 'not-an-array' );
 
 		$this->assertSame( 'yes', $clean['enabled'] );
-		$this->assertSame( 'yes', $clean['include_description'] );
+		$this->assertSame( 'yes', $clean['include_full_description'] );
 	}
 
 	/**
@@ -106,51 +111,52 @@ class SettingsTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * add_menu() registers the submenu page under WooCommerce.
+	 * The WooCommerce products tab gains our section.
 	 */
-	public function test_menu_registered_under_woocommerce() {
-		global $submenu;
-
-		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
-
+	public function test_wc_section_added() {
 		$settings = new Settings();
-		$settings->add_menu();
 
-		$found = false;
-		if ( isset( $submenu['woocommerce'] ) ) {
-			foreach ( $submenu['woocommerce'] as $item ) {
-				if ( 'product-markdown-mirror' === $item[2] ) {
-					$found = true;
-				}
-			}
-		}
+		$sections = $settings->add_wc_section( array( '' => 'General' ) );
 
-		$this->assertTrue( $found, 'Submenu page product-markdown-mirror not found under WooCommerce menu.' );
+		$this->assertArrayHasKey( Settings::SECTION_ID, $sections );
 	}
 
 	/**
-	 * Taxonomy toggle fields register for existing taxonomies.
+	 * Our section returns the full field set; other sections pass through.
 	 */
-	public function test_taxonomy_toggle_fields_registered() {
-		global $wp_settings_fields;
-
+	public function test_wc_settings_fields_for_section() {
 		$settings = new Settings();
-		$settings->register_settings();
 
-		$fields = isset( $wp_settings_fields[ Settings::PAGE_SLUG ]['product_markdown_mirror_terms'] )
-			? $wp_settings_fields[ Settings::PAGE_SLUG ]['product_markdown_mirror_terms']
-			: array();
+		$passthrough = $settings->add_wc_settings( array( 'untouched' ), 'inventory' );
+		$this->assertSame( array( 'untouched' ), $passthrough );
 
-		$this->assertArrayHasKey( 'mirror_categories', $fields );
-		$this->assertArrayHasKey( 'mirror_tags', $fields );
+		$fields = $settings->add_wc_settings( array(), Settings::SECTION_ID );
+		$ids    = wp_list_pluck( $fields, 'id' );
+
+		$this->assertContains( Settings::OPTION_NAME . '[enabled]', $ids );
+		$this->assertContains( Settings::OPTION_NAME . '[include_full_description]', $ids );
+		$this->assertContains( Settings::OPTION_NAME . '[include_images]', $ids );
+		$this->assertContains( Settings::OPTION_NAME . '[mirror_categories]', $ids );
 
 		if ( taxonomy_exists( 'product_brand' ) ) {
-			$this->assertArrayHasKey( 'mirror_brands', $fields );
+			$this->assertContains( Settings::OPTION_NAME . '[mirror_brands]', $ids );
 		} else {
-			$this->assertArrayNotHasKey( 'mirror_brands', $fields );
+			$this->assertNotContains( Settings::OPTION_NAME . '[mirror_brands]', $ids );
 		}
+	}
 
-		unregister_setting( Settings::OPTION_GROUP, Settings::OPTION_NAME );
+	/**
+	 * The plugins screen gets a Settings action link to the WC section.
+	 */
+	public function test_settings_action_link() {
+		$settings = new Settings();
+
+		$links = $settings->add_action_links( array( '<a href="#">Deactivate</a>' ) );
+
+		$this->assertCount( 2, $links );
+		$this->assertStringContainsString( 'wc-settings', $links[0] );
+		$this->assertStringContainsString( 'section=' . Settings::SECTION_ID, $links[0] );
+		$this->assertStringContainsString( '>Settings<', $links[0] );
 	}
 
 	/**
@@ -174,27 +180,45 @@ class SettingsTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * term_mirrors_enabled: defaults off, unknown taxonomies always false.
+	 * term_mirrors_enabled: defaults on, merchant can disable, unknown taxonomies always false.
 	 */
 	public function test_term_mirrors_enabled_defaults() {
-		$this->assertFalse( Settings::term_mirrors_enabled( 'product_cat' ) );
-		$this->assertFalse( Settings::term_mirrors_enabled( 'product_tag' ) );
-		$this->assertFalse( Settings::term_mirrors_enabled( 'post_tag' ) );
+		$this->assertTrue( Settings::term_mirrors_enabled( 'product_cat' ) );
+		$this->assertTrue( Settings::term_mirrors_enabled( 'product_tag' ) );
+		$this->assertFalse( Settings::term_mirrors_enabled( 'post_tag' ), 'Unknown taxonomies are never enabled.' );
 
-		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
+		update_option( Settings::OPTION_NAME, array( 'mirror_tags' => 'no' ) );
 
 		$this->assertTrue( Settings::term_mirrors_enabled( 'product_cat' ) );
 		$this->assertFalse( Settings::term_mirrors_enabled( 'product_tag' ) );
 	}
 
 	/**
-	 * register_hooks() wires the admin actions.
+	 * product_mirror_args mirrors the section toggles.
+	 */
+	public function test_product_mirror_args_follow_toggles() {
+		$args = Settings::product_mirror_args();
+
+		$this->assertTrue( $args['include_images'] );
+		$this->assertTrue( $args['include_full_description'] );
+
+		update_option( Settings::OPTION_NAME, array( 'include_images' => 'no' ) );
+
+		$args = Settings::product_mirror_args();
+
+		$this->assertFalse( $args['include_images'] );
+		$this->assertTrue( $args['include_reviews'] );
+	}
+
+	/**
+	 * register_hooks() wires the WooCommerce settings filters.
 	 */
 	public function test_hooks_are_registered() {
 		$settings = new Settings();
 		$settings->register_hooks();
 
 		$this->assertNotFalse( has_action( 'admin_init', array( $settings, 'register_settings' ) ) );
-		$this->assertNotFalse( has_action( 'admin_menu', array( $settings, 'add_menu' ) ) );
+		$this->assertNotFalse( has_filter( 'woocommerce_get_sections_products', array( $settings, 'add_wc_section' ) ) );
+		$this->assertNotFalse( has_filter( 'woocommerce_get_settings_products', array( $settings, 'add_wc_settings' ) ) );
 	}
 }

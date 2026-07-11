@@ -76,7 +76,7 @@ class Conflicts {
 		}
 
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-		if ( ! $screen || ! in_array( $screen->id, array( 'plugins', 'woocommerce_page_' . Settings::PAGE_SLUG ), true ) ) {
+		if ( ! $screen || ! in_array( $screen->id, array( 'plugins', 'woocommerce_page_wc-settings' ), true ) ) {
 			return;
 		}
 

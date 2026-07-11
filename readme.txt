@@ -31,9 +31,13 @@ Example: `https://example.com/product/ceramic-dripper/` also serves `https://exa
 
 Sections with no data are omitted, never padded. Every mirror sends a canonical `Link` header pointing at your HTML page and an `X-Robots-Tag: noindex` header, so the mirror never competes with your product page in search. Each product page also gets one `rel="alternate"` link tag so agents can discover the mirror.
 
-**Taxonomy mirrors (optional, off by default)**
+**Taxonomy mirrors**
 
-Three separate toggles add `.md` mirrors for your archive pages: product categories (including hierarchical paths like `/product-category/clothing/shirts.md`), brands, and tags. Each term mirror carries the term name and description, subcategories with their own mirror links, and a paginated product list (100 per page at `/page/2.md`, `/page/3.md`, and so on, with previous/next links stated in the document; never silent truncation). Term mirrors follow archive visibility rules, so catalog-hidden products stay out, exactly as on the archive page itself. Because terms carry no honest modified date, term mirrors send no Last-Modified header and print no fabricated freshness date.
+Product categories (including hierarchical paths like `/product-category/clothing/shirts.md`), brands, and tags get `.md` mirrors of their archive pages too, each behind its own toggle. Each term mirror carries the term name and description, subcategories with their own mirror links, and a paginated product list (100 per page at `/page/2.md`, `/page/3.md`, and so on, with previous/next links stated in the document; never silent truncation). Term mirrors follow archive visibility rules, so catalog-hidden products stay out, exactly as on the archive page itself. Because terms carry no honest modified date, term mirrors send no Last-Modified header and print no fabricated freshness date.
+
+**You choose what mirrors carry**
+
+Everything is on by default. In WooCommerce, Settings, Products, Markdown mirrors you can switch off any product mirror section (identifiers, classification, specifications, price, availability, variants, reviews, images, short description, full description) and any taxonomy mirror group. Sections with no data are always omitted automatically.
 
 **What this plugin never does**
 
@@ -90,9 +94,13 @@ No. The plugin emits no schema, changes no canonicals or titles, and adds exactl
 
 Password-protected and unpublished products are never mirrored (their mirror URLs return 404). Catalog-hidden products still have public pages in WooCommerce, so they mirror; use the `product_markdown_mirror_is_mirrored` filter to exclude specific products.
 
-= How do I enable category, brand, or tag mirrors? =
+= Where are the settings? =
 
-WooCommerce, Markdown Mirror, section "Taxonomy mirrors": one checkbox per group. They are off by default on purpose; each group adds public URLs, and that should be your explicit choice. Brands appear only when your store has the brands taxonomy.
+WooCommerce, Settings, Products, Markdown mirrors. There is also a Settings link right on the plugin's row in your plugins list. Everything is on by default; uncheck what you do not want. Brand options appear only when your store has the brands taxonomy.
+
+= Can I choose what the mirror contains? =
+
+Yes. Every product mirror section has its own checkbox (identifiers, classification, specifications, price, availability, variants, reviews, images, and the short and full descriptions), and each taxonomy group has its own toggle. Turning a section off only omits it; nothing can make a mirror say something your page does not.
 
 = How does pagination work on term mirrors? =
 
@@ -104,14 +112,15 @@ Everything the plugin stored is removed: settings, cached mirrors, notice dismis
 
 == Screenshots ==
 
-1. Settings screen under WooCommerce with the honest-boundary note.
+1. The Markdown mirrors section under WooCommerce, Settings, Products.
 2. A product mirror served as text/markdown in the browser.
 
 == Changelog ==
 
 = 1.0.0 =
-* Initial release: product mirrors at {product-url}.md with variable-product support and disclosed caps, rel=alternate discovery, canonical and noindex headers, short-TTL caching with full invalidation, conflict detection, and complete uninstall.
-* Optional taxonomy mirrors for product categories (hierarchical paths included), brands, and tags, each behind its own toggle, all off by default, with paginated product lists (100 per page, previous/next links, honest 404 past the last page) and precise cache invalidation.
+* Initial release: product mirrors at {product-url}.md carrying identifiers, classification, specifications, price, availability, variants, reviews, images, and descriptions, with rel=alternate discovery, canonical and noindex headers, short-TTL caching with full invalidation, conflict detection, and complete uninstall.
+* Taxonomy mirrors for product categories (hierarchical paths included), brands, and tags with paginated product lists (100 per page, previous/next links, honest 404 past the last page) and precise cache invalidation.
+* Native settings section under WooCommerce, Settings, Products with per-section content control; everything on by default; Settings link on the plugins screen.
 
 == Upgrade Notice ==
 
