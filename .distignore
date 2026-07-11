@@ -5,6 +5,8 @@
 .git
 .github
 .gitignore
+.idea
+.wordpress.org
 .wp-env.json
 CLAUDE.md
 composer.json

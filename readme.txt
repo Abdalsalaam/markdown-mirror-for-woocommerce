@@ -114,6 +114,7 @@ Everything the plugin stored is removed: settings, cached mirrors, notice dismis
 
 1. The Markdown mirrors section under WooCommerce, Settings, Products.
 2. A product mirror served as text/markdown in the browser.
+3. A category mirror with its paginated product list in the browser.
 
 == Changelog ==
 
