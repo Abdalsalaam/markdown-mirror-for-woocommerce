@@ -88,7 +88,7 @@ No. The `.md` URLs need pretty permalinks (Settings, Permalinks). Nearly all Woo
 
 = Will it conflict with my SEO plugin? =
 
-No. The plugin emits no schema, changes no canonicals or titles, and adds exactly one link tag to product pages. If another active plugin also serves `.md` URLs, you get one dismissible notice asking you to keep only one.
+No. The plugin emits no schema, changes no canonicals or titles, and adds exactly one link tag to product pages. If another active plugin also serves `.md` URLs, the Status row on the plugin's settings screen reports the conflict, names the other plugin, and explains why you should keep only one. The plugin adds no admin notices.
 
 = Are password-protected, draft, or hidden products mirrored? =
 
@@ -108,7 +108,7 @@ Each term mirror lists up to 100 products per page and links the next page (`...
 
 = What happens when I uninstall? =
 
-Everything the plugin stored is removed: settings, cached mirrors, notice dismissals, term cache versions, on every site of a multisite network. Nothing else is touched.
+Everything the plugin stored is removed: settings, cached mirrors, term cache versions, on every site of a multisite network. Nothing else is touched.
 
 == Screenshots ==
 
@@ -121,7 +121,7 @@ Everything the plugin stored is removed: settings, cached mirrors, notice dismis
 = 1.0.0 =
 * Initial release: product mirrors at {product-url}.md carrying identifiers, classification, specifications, price, availability, variants, reviews, images, and descriptions, with rel=alternate discovery, canonical and noindex headers, short-TTL caching with full invalidation, conflict detection, and complete uninstall.
 * Taxonomy mirrors for product categories (hierarchical paths included), brands, and tags with paginated product lists (100 per page, previous/next links, honest 404 past the last page) and precise cache invalidation.
-* Native settings section under WooCommerce, Settings, Products with per-section content control; everything on by default; Settings link on the plugins screen.
+* Native settings section under WooCommerce, Settings, Products with per-section content control and a Status row reporting .md-serving conflicts (no admin notices); everything on by default; Settings link on the plugins screen.
 
 == Upgrade Notice ==
 

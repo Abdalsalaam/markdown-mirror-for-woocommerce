@@ -30,7 +30,8 @@ function product_markdown_mirror_uninstall_site() {
 		)
 	);
 
-	// Per-user conflict-notice dismissals.
+	// Per-user conflict-notice dismissals written by pre-release builds
+	// (the released plugin shows no notices; the key stays swept here).
 	delete_metadata( 'user', 0, 'product_markdown_mirror_conflict_dismissed', '', true );
 
 	// Term cache versions.

@@ -220,5 +220,57 @@ class SettingsTest extends WP_UnitTestCase {
 		$this->assertNotFalse( has_action( 'admin_init', array( $settings, 'register_settings' ) ) );
 		$this->assertNotFalse( has_filter( 'woocommerce_get_sections_products', array( $settings, 'add_wc_section' ) ) );
 		$this->assertNotFalse( has_filter( 'woocommerce_get_settings_products', array( $settings, 'add_wc_settings' ) ) );
+		$this->assertNotFalse( has_action( 'woocommerce_admin_field_product_markdown_mirror_conflict_status', array( $settings, 'render_conflict_status' ) ) );
+	}
+
+	/**
+	 * The settings screen carries the conflict status row.
+	 */
+	public function test_wc_settings_fields_include_conflict_status_row() {
+		$settings = new Settings();
+
+		$fields = $settings->add_wc_settings( array(), Settings::SECTION_ID );
+		$types  = wp_list_pluck( $fields, 'type' );
+
+		$this->assertContains( 'product_markdown_mirror_conflict_status', $types, 'The settings screen must carry the conflict status row.' );
+	}
+
+	/**
+	 * Status renders Good when no conflicting plugin is active.
+	 */
+	public function test_conflict_status_renders_good() {
+		$settings = new Settings();
+
+		ob_start();
+		$settings->render_conflict_status();
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( '>Good<', $html );
+		$this->assertStringNotContainsString( '>Conflict<', $html );
+	}
+
+	/**
+	 * Status renders Conflict and names the other plugin when one is active.
+	 */
+	public function test_conflict_status_renders_conflict_with_reason() {
+		add_filter(
+			'product_markdown_mirror_conflicting_plugins',
+			static function ( $slugs ) {
+				$slugs[] = 'fake-md-server';
+				return $slugs;
+			}
+		);
+
+		update_option( 'active_plugins', array_merge( (array) get_option( 'active_plugins', array() ), array( 'fake-md-server/fake-md-server.php' ) ) );
+
+		$settings = new Settings();
+
+		ob_start();
+		$settings->render_conflict_status();
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( '>Conflict<', $html );
+		$this->assertStringContainsString( 'fake-md-server', $html );
+		$this->assertStringNotContainsString( '>Good<', $html );
 	}
 }

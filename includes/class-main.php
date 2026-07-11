@@ -130,11 +130,6 @@ final class Main {
 
 		$head_link = new Head_Link();
 		$head_link->register_hooks();
-
-		if ( is_admin() ) {
-			$conflicts = new Conflicts();
-			$conflicts->register_hooks();
-		}
 	}
 
 	/**
@@ -149,9 +144,22 @@ final class Main {
 	/**
 	 * Admin notice shown when WooCommerce is missing.
 	 *
+	 * Core's Requires Plugins header already blocks activation without
+	 * WooCommerce; this covers programmatic deactivation only. Shown to
+	 * plugin managers on the Plugins screen alone, nowhere else.
+	 *
 	 * @return void
 	 */
 	public function woocommerce_missing_notice() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'plugins' !== $screen->id ) {
+			return;
+		}
+
 		echo '<div class="notice notice-error"><p>';
 		esc_html_e( 'Product Markdown Mirror requires WooCommerce to be installed and active.', 'product-markdown-mirror' );
 		echo '</p></div>';

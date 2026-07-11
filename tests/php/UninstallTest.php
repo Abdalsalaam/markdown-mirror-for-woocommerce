@@ -6,7 +6,6 @@
  */
 
 use AgentMint\ProductMarkdownMirror\Cache;
-use AgentMint\ProductMarkdownMirror\Conflicts;
 use AgentMint\ProductMarkdownMirror\Settings;
 
 /**
@@ -35,7 +34,8 @@ class UninstallTest extends WP_UnitTestCase {
 		set_transient( 'product_markdown_mirror_7_123', 'BODY', 300 );
 
 		$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
-		update_user_meta( $user_id, Conflicts::DISMISS_META, '1' );
+		// Legacy dismissal meta written by pre-release builds; uninstall still sweeps it.
+		update_user_meta( $user_id, 'product_markdown_mirror_conflict_dismissed', '1' );
 
 		$term_result = wp_insert_term( 'Uninstall Term', 'product_cat' );
 		update_term_meta( $term_result['term_id'], 'product_markdown_mirror_ver', 5 );
@@ -50,7 +50,7 @@ class UninstallTest extends WP_UnitTestCase {
 		$this->assertFalse( get_option( 'product_markdown_mirror_flush_needed' ) );
 		$this->assertFalse( get_option( Cache::GENERATION_OPTION ) );
 		$this->assertFalse( get_transient( 'product_markdown_mirror_7_123' ) );
-		$this->assertSame( '', (string) get_user_meta( $user_id, Conflicts::DISMISS_META, true ) );
+		$this->assertSame( '', (string) get_user_meta( $user_id, 'product_markdown_mirror_conflict_dismissed', true ) );
 		$this->assertSame( '', (string) get_term_meta( $term_result['term_id'], 'product_markdown_mirror_ver', true ) );
 
 		$leftover = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery

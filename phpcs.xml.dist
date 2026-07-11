@@ -13,6 +13,8 @@
 	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>dist/*</exclude-pattern>
 	<exclude-pattern>tests/e2e/*</exclude-pattern>
+	<!-- Dev-only tooling, .distignore-excluded from the shipped zip. -->
+	<exclude-pattern>scripts/*</exclude-pattern>
 
 	<!-- Configs -->
 	<config name="minimum_supported_wp_version" value="6.5" />

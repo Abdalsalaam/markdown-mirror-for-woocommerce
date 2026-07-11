@@ -196,6 +196,7 @@ class Settings {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_filter( 'woocommerce_get_sections_products', array( $this, 'add_wc_section' ) );
 		add_filter( 'woocommerce_get_settings_products', array( $this, 'add_wc_settings' ), 10, 2 );
+		add_action( 'woocommerce_admin_field_product_markdown_mirror_conflict_status', array( $this, 'render_conflict_status' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( PRODUCT_MARKDOWN_MIRROR_FILE ), array( $this, 'add_action_links' ) );
 
 		// Toggling groups adds or removes public routes, so a deferred rewrite
@@ -263,6 +264,10 @@ class Settings {
 				'desc'  => __( 'Serves a read-only Markdown copy of product and archive pages at the page URL plus .md. Mirrors always carry exactly the facts the page shows; nothing here can make them differ. Sections with no data are omitted automatically.', 'product-markdown-mirror' ),
 			),
 			array(
+				'type' => 'product_markdown_mirror_conflict_status',
+				'id'   => 'product_markdown_mirror_conflict_status',
+			),
+			array(
 				'title'   => __( 'Enable mirrors', 'product-markdown-mirror' ),
 				'desc'    => __( 'Serve .md mirrors for published products', 'product-markdown-mirror' ),
 				'id'      => self::OPTION_NAME . '[enabled]',
@@ -317,6 +322,42 @@ class Settings {
 		);
 
 		return $fields;
+	}
+
+	/**
+	 * Render the status row on the settings screen.
+	 *
+	 * This is the plugin's only conflict reporting surface (no admin
+	 * notices): Good when this plugin is the sole .md server, Conflict
+	 * naming the other plugin and the reason otherwise.
+	 *
+	 * @return void
+	 */
+	public function render_conflict_status() {
+		$conflicts = new Conflicts();
+		$detected  = $conflicts->detect();
+		?>
+		<tr class="product-markdown-mirror-status">
+			<th scope="row" class="titledesc"><?php esc_html_e( 'Status', 'product-markdown-mirror' ); ?></th>
+			<td class="forminp">
+				<?php if ( empty( $detected ) ) : ?>
+					<strong style="color: #00a32a;"><?php esc_html_e( 'Good', 'product-markdown-mirror' ); ?></strong>
+					<p class="description"><?php esc_html_e( 'No conflicts detected. This plugin is the only active plugin serving .md URLs.', 'product-markdown-mirror' ); ?></p>
+				<?php else : ?>
+					<strong style="color: #d63638;"><?php esc_html_e( 'Conflict', 'product-markdown-mirror' ); ?></strong>
+					<p class="description">
+						<?php
+						printf(
+							/* translators: %s: comma-separated plugin slugs. */
+							esc_html__( 'Another active plugin also serves .md URLs (%s). Only one plugin should own that suffix: which one answers depends on rewrite rule order, so mirrors may be served by the other plugin. Keep one and deactivate the other.', 'product-markdown-mirror' ),
+							esc_html( implode( ', ', $detected ) )
+						);
+						?>
+					</p>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php
 	}
 
 	/**

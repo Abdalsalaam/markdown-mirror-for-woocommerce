@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-11T12:53:48+00:00\n"
+"POT-Creation-Date: 2026-07-11T19:18:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: product-markdown-mirror\n"
@@ -34,16 +34,7 @@ msgstr ""
 msgid "https://agentmint.net"
 msgstr ""
 
-#. translators: %s: comma-separated plugin slugs.
-#: includes/class-conflicts.php:100
-msgid "Product Markdown Mirror: another active plugin also serves .md URLs (%s). Only one plugin should own that suffix; please keep one and deactivate the other."
-msgstr ""
-
-#: includes/class-conflicts.php:103
-msgid "Dismiss"
-msgstr ""
-
-#: includes/class-main.php:156
+#: includes/class-main.php:164
 msgid "Product Markdown Mirror requires WooCommerce to be installed and active."
 msgstr ""
 
@@ -127,44 +118,65 @@ msgstr ""
 msgid "The full product description as plain text"
 msgstr ""
 
-#: includes/class-settings.php:241
-#: includes/class-settings.php:260
+#: includes/class-settings.php:242
+#: includes/class-settings.php:261
 msgid "Markdown mirrors"
 msgstr ""
 
-#: includes/class-settings.php:263
+#: includes/class-settings.php:264
 msgid "Serves a read-only Markdown copy of product and archive pages at the page URL plus .md. Mirrors always carry exactly the facts the page shows; nothing here can make them differ. Sections with no data are omitted automatically."
 msgstr ""
 
-#: includes/class-settings.php:266
+#: includes/class-settings.php:271
 msgid "Enable mirrors"
 msgstr ""
 
-#: includes/class-settings.php:267
+#: includes/class-settings.php:272
 msgid "Serve .md mirrors for published products"
 msgstr ""
 
-#: includes/class-settings.php:277
+#: includes/class-settings.php:282
 msgid "Mirror content"
 msgstr ""
 
-#: includes/class-settings.php:290
+#: includes/class-settings.php:295
 msgid "Category archive mirrors (hierarchical paths included)"
 msgstr ""
 
-#: includes/class-settings.php:291
+#: includes/class-settings.php:296
 msgid "Brand archive mirrors"
 msgstr ""
 
-#: includes/class-settings.php:292
+#: includes/class-settings.php:297
 msgid "Tag archive mirrors"
 msgstr ""
 
-#: includes/class-settings.php:302
+#: includes/class-settings.php:307
 msgid "Taxonomy mirrors"
 msgstr ""
 
-#: includes/class-settings.php:331
+#: includes/class-settings.php:341
+msgid "Status"
+msgstr ""
+
+#: includes/class-settings.php:344
+msgid "Good"
+msgstr ""
+
+#: includes/class-settings.php:345
+msgid "No conflicts detected. This plugin is the only active plugin serving .md URLs."
+msgstr ""
+
+#: includes/class-settings.php:347
+msgid "Conflict"
+msgstr ""
+
+#. translators: %s: comma-separated plugin slugs.
+#: includes/class-settings.php:352
+msgid "Another active plugin also serves .md URLs (%s). Only one plugin should own that suffix: which one answers depends on rewrite rule order, so mirrors may be served by the other plugin. Keep one and deactivate the other."
+msgstr ""
+
+#: includes/class-settings.php:372
 msgid "Settings"
 msgstr ""
 
