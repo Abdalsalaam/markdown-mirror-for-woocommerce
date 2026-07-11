@@ -99,7 +99,7 @@ final class Main {
 	 * @return void
 	 */
 	private function includes() {
-		// Components are added task by task.
+		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-settings.php';
 	}
 
 	/**
@@ -108,7 +108,8 @@ final class Main {
 	 * @return void
 	 */
 	private function init_components() {
-		// Components are added task by task.
+		$settings = new Settings();
+		$settings->register_hooks();
 	}
 
 	/**

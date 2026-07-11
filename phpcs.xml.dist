@@ -39,6 +39,8 @@
 				<element value="AgentMint\ProductMarkdownMirror" />
 			</property>
 		</properties>
+		<!-- Test scaffolding defines WP-core-mandated constants (DB_NAME, WP_TESTS_*) and is never shipped. -->
+		<exclude-pattern>tests/*</exclude-pattern>
 	</rule>
 
 	<rule ref="PHPCompatibility">
