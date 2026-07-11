@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46bdc00146c33ba79aa19f3b7d813604",
+    "content-hash": "0e1ad69e6f93a1add71e5e96e4092767",
     "packages": [],
     "packages-dev": [
         {
@@ -2454,6 +2454,54 @@
                 }
             ],
             "time": "2025-11-25T12:08:04+00:00"
+        },
+        {
+            "name": "wp-phpunit/wp-phpunit",
+            "version": "7.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wp-phpunit/wp-phpunit.git",
+                "reference": "0d17335392d78b12b3e7e6b519cd53db728df52a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wp-phpunit/wp-phpunit/zipball/0d17335392d78b12b3e7e6b519cd53db728df52a",
+                "reference": "0d17335392d78b12b3e7e6b519cd53db728df52a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "__loaded.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Evan Mattson",
+                    "email": "me@aaemnnost.tv"
+                },
+                {
+                    "name": "WordPress Community",
+                    "homepage": "https://wordpress.org/about/"
+                }
+            ],
+            "description": "WordPress core PHPUnit library",
+            "homepage": "https://github.com/wp-phpunit",
+            "keywords": [
+                "phpunit",
+                "test",
+                "wordpress"
+            ],
+            "support": {
+                "docs": "https://github.com/wp-phpunit/docs",
+                "issues": "https://github.com/wp-phpunit/issues",
+                "source": "https://github.com/wp-phpunit/wp-phpunit"
+            },
+            "time": "2026-07-10T02:38:55+00:00"
         },
         {
             "name": "yoast/phpunit-polyfills",

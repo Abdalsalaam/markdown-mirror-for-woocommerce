@@ -1,0 +1,15 @@
+{
+	"name": "product-markdown-mirror",
+	"private": true,
+	"description": "Dev environment for Product Markdown Mirror by AgentMint.",
+	"license": "GPL-2.0-or-later",
+	"devDependencies": {
+		"@wordpress/env": "^10.0.0"
+	},
+	"scripts": {
+		"env:start": "wp-env start",
+		"env:stop": "wp-env stop",
+		"env:destroy": "wp-env destroy",
+		"test:php": "wp-env run tests-cli --env-cwd=wp-content/plugins/product-markdown-mirror vendor/bin/phpunit"
+	}
+}
