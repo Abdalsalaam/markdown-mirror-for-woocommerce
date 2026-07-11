@@ -54,7 +54,7 @@ class Renderer {
 		 * section here is the supported way to extend the mirror (for example
 		 * shipping or returns data a site actually holds).
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param array<string, string> $sections Section name => Markdown.
 		 * @param WC_Product            $product  Product being rendered.
@@ -66,7 +66,7 @@ class Renderer {
 		/**
 		 * Filter the assembled Markdown document.
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param string     $document Full Markdown document.
 		 * @param WC_Product $product  Product being rendered.
@@ -272,7 +272,7 @@ class Renderer {
 		 * Bounded output keeps mirrors cheap to read; when the cap applies it
 		 * is disclosed in the output rather than silently truncating.
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param int        $max_variants Maximum variation lines (default 50).
 		 * @param WC_Product $product      Product being rendered.

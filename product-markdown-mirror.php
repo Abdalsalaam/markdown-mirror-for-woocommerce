@@ -3,7 +3,7 @@
  * Plugin Name: Product Markdown Mirror by AgentMint
  * Plugin URI: https://agentmint.net/blueprints/product-markdown-mirror/
  * Description: Serves read-only Markdown mirrors of WooCommerce product pages at {product-url}.md with rel="alternate" discovery. No tracking, no store writes.
- * Version: 0.1.0
+ * Version: 1.0.0
  * Author: Abdalsalaam Halawa
  * Author URI: https://halawa.io
  * Text Domain: product-markdown-mirror
@@ -22,7 +22,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PRODUCT_MARKDOWN_MIRROR_VERSION', '0.1.0' );
+define( 'PRODUCT_MARKDOWN_MIRROR_VERSION', '1.0.0' );
 define( 'PRODUCT_MARKDOWN_MIRROR_FILE', __FILE__ );
 define( 'PRODUCT_MARKDOWN_MIRROR_ABSPATH', trailingslashit( __DIR__ ) );
 

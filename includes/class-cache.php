@@ -78,7 +78,7 @@ class Cache {
 		 *
 		 * Invalidation hooks handle correctness; the TTL only bounds storage.
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param int        $ttl     Seconds (default HOUR_IN_SECONDS).
 		 * @param WC_Product $product Product being cached.

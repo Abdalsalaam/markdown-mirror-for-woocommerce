@@ -45,7 +45,7 @@ class Conflicts {
 		/**
 		 * Filter the list of plugin directory slugs known to serve .md URLs.
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param string[] $slugs Plugin directory slugs.
 		 */

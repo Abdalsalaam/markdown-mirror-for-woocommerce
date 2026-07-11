@@ -188,7 +188,7 @@ class Router {
 		 * The default is every publicly reachable product (equivalence with
 		 * the HTML page). Return false to exclude a product.
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param bool       $mirrored Whether the product is mirrored.
 		 * @param WC_Product $product  Product being requested.
@@ -213,7 +213,7 @@ class Router {
 		 * Short by default: price and availability live on this surface, so a
 		 * long-cached mirror could quote an offer the store no longer shows.
 		 *
-		 * @since 0.1.0
+		 * @since 1.0.0
 		 *
 		 * @param int        $max_age Seconds (default 300).
 		 * @param WC_Product $product Product being served.
