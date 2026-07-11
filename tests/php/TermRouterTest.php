@@ -201,6 +201,22 @@ class TermRouterTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The router serves term pages from the cache when present.
+	 */
+	public function test_serves_from_cache() {
+		$term = $this->make_category( 'Cached Router Cat' );
+		$this->make_product( 'Cache Filler', array( $term->term_id ) );
+
+		$cache = new AgentMint\ProductMarkdownMirror\Cache();
+		$cache->set_term_mirror( $term, 1, '# CACHED SENTINEL' );
+
+		$response = $this->router->handle_term_request( 'product_cat', $term->slug, 1 );
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertStringContainsString( 'CACHED SENTINEL', $response->get_body() );
+	}
+
+	/**
 	 * Toggles default off (author decision D1): fresh settings serve nothing.
 	 */
 	public function test_defaults_off() {

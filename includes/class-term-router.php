@@ -56,12 +56,21 @@ class Term_Router {
 	private $renderer;
 
 	/**
+	 * Cache for rendered term pages.
+	 *
+	 * @var Cache
+	 */
+	private $cache;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Term_Renderer|null $renderer Renderer; a fresh one is created when omitted.
+	 * @param Cache|null         $cache    Cache; a fresh one is created when omitted.
 	 */
-	public function __construct( ?Term_Renderer $renderer = null ) {
+	public function __construct( ?Term_Renderer $renderer = null, ?Cache $cache = null ) {
 		$this->renderer = $renderer ? $renderer : new Term_Renderer();
+		$this->cache    = $cache ? $cache : new Cache();
 	}
 
 	/**
@@ -179,10 +188,17 @@ class Term_Router {
 			return Response::not_found();
 		}
 
-		$markdown = $this->renderer->render_term( $term, max( 1, (int) $page ) );
+		$page     = max( 1, (int) $page );
+		$markdown = $this->cache->get_term_mirror( $term, $page );
 
-		if ( null === $markdown ) {
-			return Response::not_found();
+		if ( false === $markdown ) {
+			$markdown = $this->renderer->render_term( $term, $page );
+
+			if ( null === $markdown ) {
+				return Response::not_found();
+			}
+
+			$this->cache->set_term_mirror( $term, $page, $markdown );
 		}
 
 		return new Response( 200, $this->term_headers( $term ), $markdown . "\n" );

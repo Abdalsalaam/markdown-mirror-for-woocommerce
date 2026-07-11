@@ -120,6 +120,60 @@ class CacheTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Term mirror pages cache independently per page.
+	 */
+	public function test_term_mirror_roundtrip_per_page() {
+		$result = wp_insert_term( 'Cache Term', 'product_cat' );
+		$term   = get_term( $result['term_id'], 'product_cat' );
+		$cache  = new Cache();
+
+		$this->assertFalse( $cache->get_term_mirror( $term, 1 ) );
+
+		$cache->set_term_mirror( $term, 1, 'PAGE ONE' );
+		$cache->set_term_mirror( $term, 2, 'PAGE TWO' );
+
+		$this->assertSame( 'PAGE ONE', $cache->get_term_mirror( $term, 1 ) );
+		$this->assertSame( 'PAGE TWO', $cache->get_term_mirror( $term, 2 ) );
+	}
+
+	/**
+	 * Editing a term invalidates all its cached pages.
+	 */
+	public function test_term_edit_invalidates_all_pages() {
+		$result = wp_insert_term( 'Editable Term', 'product_cat' );
+		$term   = get_term( $result['term_id'], 'product_cat' );
+		$cache  = new Cache();
+
+		$cache->set_term_mirror( $term, 1, 'STALE ONE' );
+		$cache->set_term_mirror( $term, 2, 'STALE TWO' );
+
+		wp_update_term( $term->term_id, 'product_cat', array( 'description' => 'changed' ) );
+
+		$this->assertFalse( $cache->get_term_mirror( $term, 1 ) );
+		$this->assertFalse( $cache->get_term_mirror( $term, 2 ) );
+	}
+
+	/**
+	 * Saving a product invalidates its terms' cached mirrors.
+	 */
+	public function test_product_save_invalidates_its_terms() {
+		$result = wp_insert_term( 'Product Term', 'product_cat' );
+		$term   = get_term( $result['term_id'], 'product_cat' );
+
+		$product = $this->make_product();
+		$product->set_category_ids( array( $term->term_id ) );
+		$product->save();
+
+		$cache = new Cache();
+		$cache->set_term_mirror( $term, 1, 'STALE LIST' );
+
+		$product->set_regular_price( '8.00' );
+		$product->save();
+
+		$this->assertFalse( $cache->get_term_mirror( $term, 1 ) );
+	}
+
+	/**
 	 * Changing plugin settings invalidates every cached mirror.
 	 */
 	public function test_settings_change_invalidates_all() {

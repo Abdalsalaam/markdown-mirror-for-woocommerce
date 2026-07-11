@@ -39,17 +39,51 @@ class Head_Link {
 			return;
 		}
 
-		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		if ( function_exists( 'is_product' ) && is_product() ) {
+			$product = wc_get_product( get_queried_object_id() );
+
+			if ( $product ) {
+				$this->render_for( $product );
+			}
+
 			return;
 		}
 
-		$product = wc_get_product( get_queried_object_id() );
+		if ( is_tax( Term_Router::TAXONOMIES ) ) {
+			$term = get_queried_object();
 
-		if ( ! $product ) {
+			if ( $term instanceof \WP_Term ) {
+				$this->render_for_term( $term );
+			}
+		}
+	}
+
+	/**
+	 * Print the alternate link tag for a term archive.
+	 *
+	 * @param \WP_Term $term Term.
+	 * @return void
+	 */
+	public function render_for_term( \WP_Term $term ) {
+		if ( ! Settings::term_mirrors_enabled( $term->taxonomy ) ) {
 			return;
 		}
 
-		$this->render_for( $product );
+		/** This filter is documented in includes/class-term-router.php */
+		if ( ! apply_filters( 'product_markdown_mirror_term_is_mirrored', true, $term ) ) {
+			return;
+		}
+
+		$url = Router::term_mirror_url( $term );
+
+		if ( '' === $url ) {
+			return;
+		}
+
+		printf(
+			'<link rel="alternate" type="text/markdown" href="%s" />' . "\n",
+			esc_url( $url )
+		);
 	}
 
 	/**

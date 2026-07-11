@@ -117,6 +117,61 @@ class HeadLinkTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Term archives get an alternate link when their group is enabled.
+	 */
+	public function test_term_alternate_link_when_enabled() {
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
+
+		$result = wp_insert_term( 'Head Link Cat', 'product_cat' );
+		$term   = get_term( $result['term_id'], 'product_cat' );
+
+		$head_link = new Head_Link();
+
+		ob_start();
+		$head_link->render_for_term( $term );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( '<link rel="alternate"', $output );
+		$this->assertStringContainsString( esc_url( Router::term_mirror_url( $term ) ), $output );
+	}
+
+	/**
+	 * No term link while the group toggle is off (the default).
+	 */
+	public function test_no_term_link_when_group_disabled() {
+		$result = wp_insert_term( 'Disabled Cat', 'product_cat' );
+		$term   = get_term( $result['term_id'], 'product_cat' );
+
+		$head_link = new Head_Link();
+
+		ob_start();
+		$head_link->render_for_term( $term );
+		$output = ob_get_clean();
+
+		$this->assertSame( '', $output );
+	}
+
+	/**
+	 * maybe_render() emits the term link on a real term archive query.
+	 */
+	public function test_maybe_render_on_term_archive() {
+		update_option( Settings::OPTION_NAME, array( 'mirror_categories' => 'yes' ) );
+
+		$result = wp_insert_term( 'Archive Context Cat', 'product_cat' );
+		$term   = get_term( $result['term_id'], 'product_cat' );
+
+		$this->go_to( '?product_cat=' . $term->slug );
+
+		$head_link = new Head_Link();
+
+		ob_start();
+		$head_link->maybe_render();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'type="text/markdown"', $output );
+	}
+
+	/**
 	 * Conflict detection matches active plugins from the filterable list.
 	 */
 	public function test_conflict_detection() {

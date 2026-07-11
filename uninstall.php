@@ -33,6 +33,9 @@ function product_markdown_mirror_uninstall_site() {
 	// Per-user conflict-notice dismissals.
 	delete_metadata( 'user', 0, 'product_markdown_mirror_conflict_dismissed', '', true );
 
+	// Term cache versions.
+	delete_metadata( 'term', 0, 'product_markdown_mirror_ver', '', true );
+
 	// On persistent object caches, transients can live outside the options
 	// table entirely; the SQL sweep above cannot reach them. Uninstall is a
 	// one-time event, so a full cache flush is the correct, complete cleanup.

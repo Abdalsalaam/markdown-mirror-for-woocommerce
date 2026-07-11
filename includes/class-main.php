@@ -125,7 +125,7 @@ final class Main {
 		$router = new Router( new Renderer(), $cache );
 		$router->register_hooks();
 
-		$term_router = new Term_Router( new Term_Renderer() );
+		$term_router = new Term_Router( new Term_Renderer(), $cache );
 		$term_router->register_hooks();
 
 		$head_link = new Head_Link();

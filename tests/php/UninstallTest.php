@@ -37,6 +37,9 @@ class UninstallTest extends WP_UnitTestCase {
 		$user_id = self::factory()->user->create( array( 'role' => 'administrator' ) );
 		update_user_meta( $user_id, Conflicts::DISMISS_META, '1' );
 
+		$term_result = wp_insert_term( 'Uninstall Term', 'product_cat' );
+		update_term_meta( $term_result['term_id'], 'product_markdown_mirror_ver', 5 );
+
 		// Unrelated data that must survive.
 		update_option( 'unrelated_option', 'keep-me' );
 		set_transient( 'unrelated_transient', 'keep-me', 300 );
@@ -48,6 +51,7 @@ class UninstallTest extends WP_UnitTestCase {
 		$this->assertFalse( get_option( Cache::GENERATION_OPTION ) );
 		$this->assertFalse( get_transient( 'product_markdown_mirror_7_123' ) );
 		$this->assertSame( '', (string) get_user_meta( $user_id, Conflicts::DISMISS_META, true ) );
+		$this->assertSame( '', (string) get_term_meta( $term_result['term_id'], 'product_markdown_mirror_ver', true ) );
 
 		$leftover = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
