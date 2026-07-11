@@ -44,6 +44,16 @@ class Router {
 	}
 
 	/**
+	 * The mirror URL for a product: its permalink with a .md suffix.
+	 *
+	 * @param WC_Product $product Product.
+	 * @return string
+	 */
+	public static function mirror_url( WC_Product $product ) {
+		return untrailingslashit( $product->get_permalink() ) . '.md';
+	}
+
+	/**
 	 * Hook registration.
 	 *
 	 * @return void
