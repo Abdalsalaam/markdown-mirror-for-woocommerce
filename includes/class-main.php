@@ -100,6 +100,7 @@ final class Main {
 	 */
 	private function includes() {
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-settings.php';
+		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-renderer.php';
 	}
 
 	/**
