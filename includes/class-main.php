@@ -101,6 +101,7 @@ final class Main {
 	private function includes() {
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-settings.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-renderer.php';
+		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-term-renderer.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-response.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-router.php';
 		require_once PRODUCT_MARKDOWN_MIRROR_ABSPATH . 'includes/class-cache.php';

@@ -388,7 +388,7 @@ class Renderer {
 	 * @param WC_Product $product Product.
 	 * @return string
 	 */
-	private function display_price( WC_Product $product ) {
+	protected function display_price( WC_Product $product ) {
 		if ( '' === (string) $product->get_price( 'edit' ) ) {
 			return '';
 		}
@@ -404,7 +404,7 @@ class Renderer {
 	 * @param WC_Product $product Product.
 	 * @return string
 	 */
-	private function availability_label( WC_Product $product ) {
+	protected function availability_label( WC_Product $product ) {
 		$status = $product->get_stock_status();
 
 		if ( 'outofstock' === $status ) {
@@ -449,7 +449,7 @@ class Renderer {
 	 * @param mixed $value Raw value.
 	 * @return string
 	 */
-	private function single_line( $value ) {
+	protected function single_line( $value ) {
 		$value = wp_strip_all_tags( (string) $value );
 		$value = html_entity_decode( $value, ENT_QUOTES, get_bloginfo( 'charset' ) );
 
@@ -462,7 +462,7 @@ class Renderer {
 	 * @param string $html Raw HTML.
 	 * @return string
 	 */
-	private function block_text( $html ) {
+	protected function block_text( $html ) {
 		$text = wp_strip_all_tags( (string) $html );
 		$text = html_entity_decode( $text, ENT_QUOTES, get_bloginfo( 'charset' ) );
 

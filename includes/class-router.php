@@ -63,6 +63,26 @@ class Router {
 	}
 
 	/**
+	 * The mirror URL for a taxonomy term archive, optionally a specific page.
+	 *
+	 * @param \WP_Term $term Term.
+	 * @param int      $page Mirror page number (1 = root URL).
+	 * @return string Empty string when the term has no resolvable archive link.
+	 */
+	public static function term_mirror_url( \WP_Term $term, $page = 1 ) {
+		$link = get_term_link( $term );
+
+		if ( is_wp_error( $link ) ) {
+			return '';
+		}
+
+		$page   = max( 1, (int) $page );
+		$suffix = $page > 1 ? '/page/' . $page : '';
+
+		return untrailingslashit( $link ) . $suffix . '.md';
+	}
+
+	/**
 	 * Hook registration.
 	 *
 	 * @return void
