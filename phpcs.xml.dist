@@ -47,6 +47,15 @@
 		<exclude-pattern>tests/</exclude-pattern>
 	</rule>
 
+	<!-- WooCommerce's capability is not in the sniff's core list. -->
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="manage_woocommerce" />
+			</property>
+		</properties>
+	</rule>
+
 	<!-- Test code: relax doc and filename sniffs, as the reference plugins do. -->
 	<rule ref="WordPress.Files.FileName">
 		<exclude-pattern>tests/*</exclude-pattern>
@@ -55,6 +64,12 @@
 		<exclude-pattern>tests/</exclude-pattern>
 	</rule>
 	<rule ref="Squiz.Commenting.FunctionComment">
+		<exclude-pattern>tests/</exclude-pattern>
+	</rule>
+	<rule ref="WooCommerce.Commenting.CommentHooks">
+		<exclude-pattern>tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions">
 		<exclude-pattern>tests/</exclude-pattern>
 	</rule>
 </ruleset>

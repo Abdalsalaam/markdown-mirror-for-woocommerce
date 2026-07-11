@@ -102,8 +102,8 @@ class Settings {
 	/**
 	 * Align the save capability with the menu capability.
 	 *
-	 * options.php requires manage_options by default; the page is offered to
-	 * manage_woocommerce users, so saving must be too.
+	 * The options.php handler requires manage_options by default; the page is
+	 * offered to manage_woocommerce users, so saving must be too.
 	 *
 	 * @return string
 	 */

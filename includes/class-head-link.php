@@ -59,7 +59,17 @@ class Head_Link {
 	 * @return void
 	 */
 	public function render_for( WC_Product $product ) {
-		/** This filter is documented in includes/class-router.php */
+		/**
+		 * Filter whether a product gets a Markdown mirror.
+		 *
+		 * Documented in full in includes/class-router.php; applied here so the
+		 * discovery link and the route always agree.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param bool       $mirrored Whether the product is mirrored.
+		 * @param WC_Product $product  Product being rendered.
+		 */
 		if ( ! apply_filters( 'product_markdown_mirror_is_mirrored', true, $product ) ) {
 			return;
 		}

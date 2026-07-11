@@ -157,8 +157,8 @@ class RendererTest extends WP_UnitTestCase {
 	public function test_sale_window_rendered() {
 		$product = $this->make_product(
 			array(
-				'set_sale_price'       => '19.99',
-				'set_date_on_sale_to'  => gmdate( 'Y-m-d 23:59:59', strtotime( '+10 days' ) ),
+				'set_sale_price'      => '19.99',
+				'set_date_on_sale_to' => gmdate( 'Y-m-d 23:59:59', strtotime( '+10 days' ) ),
 			)
 		);
 

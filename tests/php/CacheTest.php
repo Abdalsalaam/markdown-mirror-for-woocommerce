@@ -6,34 +6,10 @@
  */
 
 use AgentMint\ProductMarkdownMirror\Cache;
-use AgentMint\ProductMarkdownMirror\Renderer;
 use AgentMint\ProductMarkdownMirror\Router;
 use AgentMint\ProductMarkdownMirror\Settings;
 
-/**
- * Renderer double that counts render calls.
- */
-class PMM_Counting_Renderer extends Renderer {
-
-	/**
-	 * Render invocation count.
-	 *
-	 * @var int
-	 */
-	public static $calls = 0;
-
-	/**
-	 * Count and delegate.
-	 *
-	 * @param WC_Product $product Product.
-	 * @param array      $args    Args.
-	 * @return string
-	 */
-	public function render( WC_Product $product, array $args = array() ) {
-		self::$calls++;
-		return parent::render( $product, $args );
-	}
-}
+require_once __DIR__ . '/class-pmm-counting-renderer.php';
 
 /**
  * Tests for Cache and its invalidation hooks.
