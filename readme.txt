@@ -1,5 +1,5 @@
 === Product Markdown Mirror by AgentMint ===
-Contributors: TODO-author-wporg-username
+Contributors: abdalsalaam
 Tags: markdown, ai agents, products, machine readable, woocommerce
 Requires at least: 6.5
 Tested up to: 7.0

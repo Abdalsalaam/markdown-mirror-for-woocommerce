@@ -1,4 +1,4 @@
-# Copyright (C) 2026 Abdalsalaam Halawa
+# Copyright (C) 2026 AgentMint
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-11T04:10:27+00:00\n"
+"POT-Creation-Date: 2026-07-11T10:39:53+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: product-markdown-mirror\n"
@@ -27,11 +27,11 @@ msgid "Serves read-only Markdown mirrors of WooCommerce product pages at {produc
 msgstr ""
 
 #. Author of the plugin
-msgid "Abdalsalaam Halawa"
+msgid "AgentMint"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "https://halawa.io"
+msgid "https://agentmint.net"
 msgstr ""
 
 #. translators: %s: comma-separated plugin slugs.
@@ -47,39 +47,39 @@ msgstr ""
 msgid "Product Markdown Mirror requires WooCommerce to be installed and active."
 msgstr ""
 
-#: includes/class-settings.php:162
+#: includes/class-settings.php:175
 msgid "Mirror output"
 msgstr ""
 
-#: includes/class-settings.php:169
+#: includes/class-settings.php:182
 msgid "Serve product mirrors"
 msgstr ""
 
-#: includes/class-settings.php:177
+#: includes/class-settings.php:190
 msgid "Include short description"
 msgstr ""
 
-#: includes/class-settings.php:192
-#: includes/class-settings.php:254
+#: includes/class-settings.php:205
+#: includes/class-settings.php:267
 msgid "Product Markdown Mirror"
 msgstr ""
 
-#: includes/class-settings.php:193
+#: includes/class-settings.php:206
 msgid "Markdown Mirror"
 msgstr ""
 
-#: includes/class-settings.php:207
+#: includes/class-settings.php:220
 msgid "Serves a read-only Markdown copy of each product page at {product-url}.md. The mirror always carries exactly the facts the product page shows; nothing here can make them differ."
 msgstr ""
 
-#: includes/class-settings.php:209
+#: includes/class-settings.php:222
 msgid "Honest boundary: no verified public source shows a shopping agent fetches product Markdown today. Treat mirrors as inexpensive, standards-shaped groundwork, not a proven ranking lever."
 msgstr ""
 
-#: includes/class-settings.php:224
+#: includes/class-settings.php:237
 msgid "Serve .md mirrors for published products"
 msgstr ""
 
-#: includes/class-settings.php:239
+#: includes/class-settings.php:252
 msgid "Append the product short description to each mirror"
 msgstr ""

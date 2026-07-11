@@ -4,8 +4,8 @@
  * Plugin URI: https://agentmint.net/blueprints/product-markdown-mirror/
  * Description: Serves read-only Markdown mirrors of WooCommerce product pages at {product-url}.md with rel="alternate" discovery. No tracking, no store writes.
  * Version: 1.0.0
- * Author: Abdalsalaam Halawa
- * Author URI: https://halawa.io
+ * Author: AgentMint
+ * Author URI: https://agentmint.net
  * Text Domain: product-markdown-mirror
  * Domain Path: /languages
  * Requires Plugins: woocommerce

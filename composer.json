@@ -5,8 +5,8 @@
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
-			"name": "Abdalsalaam Halawa",
-			"homepage": "https://halawa.io"
+			"name": "AgentMint (Abdalsalaam Halawa)",
+			"homepage": "https://agentmint.net"
 		}
 	],
 	"require": {
