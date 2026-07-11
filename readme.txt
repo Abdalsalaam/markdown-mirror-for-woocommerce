@@ -1,4 +1,4 @@
-=== Product Markdown Mirror by AgentMint ===
+=== Product Markdown Mirror ===
 Contributors: abdalsalaam
 Tags: markdown, ai agents, products, machine readable, woocommerce
 Requires at least: 6.5

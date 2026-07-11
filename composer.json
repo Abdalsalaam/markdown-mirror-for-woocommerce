@@ -1,6 +1,6 @@
 {
 	"name": "abdalsalaam/product-markdown-mirror",
-	"description": "Product Markdown Mirror by AgentMint - read-only Markdown mirrors of WooCommerce product pages.",
+	"description": "Product Markdown Mirror - read-only Markdown mirrors of WooCommerce product pages.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"authors": [

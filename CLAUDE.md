@@ -2,7 +2,7 @@
 
 ## What this is
 
-Free WooCommerce plugin "Product Markdown Mirror by AgentMint" (slug `product-markdown-mirror`):
+Free WooCommerce plugin "Product Markdown Mirror" (Author: AgentMint; slug `product-markdown-mirror`):
 serves read-only Markdown mirrors of product pages at `{product-url}.md`. Spec:
 https://agentmint.net/blueprints/product-markdown-mirror/. Target: WordPress.org submission that
 passes plugin review, Plugin Check, PHPCS, security review, and E2E.

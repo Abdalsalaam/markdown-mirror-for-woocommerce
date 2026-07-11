@@ -1,7 +1,7 @@
 {
 	"name": "product-markdown-mirror",
 	"private": true,
-	"description": "Dev environment for Product Markdown Mirror by AgentMint.",
+	"description": "Dev environment for Product Markdown Mirror.",
 	"license": "GPL-2.0-or-later",
 	"devDependencies": {
 		"@playwright/test": "^1.61.1",

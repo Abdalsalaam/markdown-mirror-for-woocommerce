@@ -2,20 +2,22 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Product Markdown Mirror by AgentMint 1.0.0\n"
+"Project-Id-Version: Product Markdown Mirror 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/product-markdown-mirror\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-11T12:25:30+00:00\n"
+"POT-Creation-Date: 2026-07-11T12:27:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: product-markdown-mirror\n"
 
 #. Plugin Name of the plugin
-msgid "Product Markdown Mirror by AgentMint"
+#: includes/class-settings.php:332
+#: includes/class-settings.php:394
+msgid "Product Markdown Mirror"
 msgstr ""
 
 #. Plugin URI of the plugin
@@ -89,11 +91,6 @@ msgstr ""
 
 #: includes/class-settings.php:297
 msgid "Each group adds public .md mirrors for its archive pages: term name, description, subcategories, and a paginated product list (100 per page). All groups are off until you enable them."
-msgstr ""
-
-#: includes/class-settings.php:332
-#: includes/class-settings.php:394
-msgid "Product Markdown Mirror"
 msgstr ""
 
 #: includes/class-settings.php:333
