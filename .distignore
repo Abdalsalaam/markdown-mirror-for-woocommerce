@@ -18,3 +18,5 @@ phpunit.xml.dist
 scripts
 tests
 vendor
+test-results
+playwright-report
