@@ -44,7 +44,9 @@ WooCommerce, Settings, Products, Markdown mirrors. Everything is on by default; 
 
 ## Installation
 
-The plugin is under review for the WordPress.org plugin directory. Until it is published there, build the zip from this repository (see Development) and install it via Plugins, Add New, Upload Plugin.
+Install it from the [WordPress.org plugin directory](https://wordpress.org/plugins/markdown-mirror-for-woocommerce/): in your dashboard, go to Plugins, Add New, search for "Markdown Mirror for WooCommerce", then install and activate.
+
+To build and install from source instead, see Development below.
 
 ## Development
 
